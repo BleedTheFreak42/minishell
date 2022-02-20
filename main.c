@@ -31,8 +31,9 @@ char *ft_expand(char *str)
 	ft_strlcpy(result[0],str,i + 1);
 	if (str[i++] == '$')
 	{
+		//check => $"PWD"
 		j = i;
-		while (str[i] && str[i] != 32)
+		while (str[i] && str[i] != 32 && str[i] != '\"' && str[i] != 39)
 			i++;
 		from = ft_substr(&str[j],0,i - j);
 		result[1] = getenv(from);
@@ -40,7 +41,6 @@ char *ft_expand(char *str)
 			return (str);
 		result[2] = ft_strdup(&str[i]);
 	}
-	// free(str);
 	if (result[0] && result[1] && result[2])
 		return (ft_strjoin(ft_strjoin(result[0],result[1]),result[2]));
 	return (NULL);
@@ -82,23 +82,23 @@ int main(int argc, char const *argv[])
 	char *str;
 	t_lexer *lexer;
 
-	str = "\"$PWD\"";
+	// str = "\"$PWD\" $HOME $? '    $PWD    '";
 
-	printf("before : %s\n",str);
-	printf("%d\n",get_nbdollar(str));
-	str = ft_expandall(str);
-	printf("after : %s\n",str);
-	// while (1)
-	// {
-	// 	str = readline("minishell : ");
-	// 	str = ft_expandall(str);
-	// 	lexer = init_lexer(str);
-	// 	t_token *token;
-	// 	while ((token = lexer_next_token(lexer)))
-	// 		printf("TOKEN(%d,%s)\n",token->e_type,token->value);
-	// }
+	// printf("before : %s\n",str);
+	// printf("%d\n",get_nbdollar(str));
+	// str = ft_expandall(str);
+	// printf("after : %s\n",str);
+	while (1)
+	{
+		str = readline("minishell : ");
+		str = ft_expandall(str);
+		lexer = init_lexer(str);
+		t_token *token;
+		while ((token = lexer_next_token(lexer)))
+			printf("TOKEN(%d,%s)\n",token->e_type,token->value);
+	}
 
-	// str = getenv("env");
-	// printf("%s\n",str);
-	return 0;
+	// str = getenv("_");
+	printf("%s\n",str);
+	// return 0;
 }

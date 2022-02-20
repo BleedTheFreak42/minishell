@@ -7,7 +7,7 @@
 		
 		{
 			"name": "(lldb) Launch",
-			"type": "cppdbg",
+			"type": "lldb",
 			"request": "launch",
 			"program": "${workspaceFolder}/minishell",
 			"args": [],

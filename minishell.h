@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/20 02:13:50 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/21 00:53:46 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 #include <readline/readline.h>
 #include "lexer.h"
 #include "tokenizer.h"
+#include "xmalloc.h"
+
+typedef	struct	s_link
+{
+	size_t				addr;
+	struct s_link		*next;
+}				t_link;
 
 typedef struct s_pipe
 {
@@ -40,19 +47,16 @@ typedef struct s_command
 	char *command;
 	t_args *args_list;
 	t_pipe *pipe;
+	t_link	*g_x;
+	void			*g_rtn;
+	t_link	*tmp;
 }t_command;
 
-// typedef struct s_stack
-// {
-// 	char c;
-// 	struct s_stack *next;
-// 	int open_quote;
-// 	int what_quote;
-// }t_stack;
+t_command g_cmd;
 
 int	ft_isprint(int c);
 char* ft_strcat(char* destination, const char* source);
-int ft_strlen(const char *str);
+unsigned int ft_strlen(const char *str);
 int	ft_isalnum(int c);
 void *ft_realloc(void *ptr,size_t size);
 void	*ft_memcpy(void *dst, const void * src, size_t n);
@@ -61,4 +65,5 @@ char	*ft_strdup(const char *s1);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchrq(const char *s, int c);
+// char	*ft_strjoin(char const *s1, char const *s2);
 #endif

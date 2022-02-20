@@ -4,7 +4,7 @@ t_lexer *init_lexer(char *content)
 {
 	t_lexer *lexer;
 
-	lexer = malloc(sizeof(t_lexer));
+	lexer = MALLOC(sizeof(t_lexer));
 	if (!lexer)
 		return (NULL);
 	lexer->content = content;
@@ -53,13 +53,14 @@ t_token *lexer_collect_redirection(t_lexer *lexer, int type)
 	char* value;
 	char* s;
 
-	value = malloc(sizeof(char) * 1);
+	value = MALLOC(sizeof(char) * 1);
     value[0] = '\0';
 	while (lexer->c != 32 && !ft_isalnum(lexer->c) && lexer->c)
 	{
 		s = lexer_parse_string(lexer);
-		value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
-		ft_strcat(value, s);
+		value = ft_strjoin(value,s);
+		// value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
+		// ft_strcat(value, s);
 		lexer_to_next(lexer);
 	}
 	if (ft_strlen(value) > 2)
@@ -83,7 +84,7 @@ t_token *lexer_collect_word(t_lexer *lexer)
 	char* s;
 
 	lexer_skip_space(lexer);
-	value = malloc(sizeof(char) * 1);
+	value = MALLOC(sizeof(char) * 1);
     value[0] = '\0';
 	while (ft_isprint(lexer->c) && lexer->c != 32 && lexer->c != '|' && lexer->c != '<' && lexer->c != '>')
 	{
@@ -91,29 +92,23 @@ t_token *lexer_collect_word(t_lexer *lexer)
 		{
 			value1 = lexer_collect_dquoted(lexer);
 			if (value1)
-        		ft_strcat(value, value1);
-			else
-			{
-				printf("syntax Error\n");
-				return (NULL);
-			}
+				value = ft_strjoin(value,value1);
+        		// ft_strcat(value, value1);
 		}
 		else if (lexer->c == 39)
 		{
 			value1 = lexer_collect_squoted(lexer);
 			if (value1)
-        		ft_strcat(value, value1);
-			else
-			{
-				printf("syntax Error\n");
-				return (NULL);
-			}
+        		// ft_strcat(value, value1);
+				value = ft_strjoin(value,value1);
+			// free(value1);
 		}
 		else
 		{
 			s = lexer_parse_string(lexer);
-			value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
-			ft_strcat(value, s);
+			value = ft_strjoin(value,s);
+			// value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
+			// ft_strcat(value, s);
 			lexer_to_next(lexer);
 		}
 	}
@@ -125,14 +120,15 @@ char *lexer_collect_dquoted(t_lexer *lexer)
 	char* value;
 	char* s;
 
-	value = malloc(sizeof(char) * 1);
+	value = MALLOC(sizeof(char) * 1);
     value[0] = '\0';
 	lexer_to_next(lexer);	
 	while (ft_isprint(lexer->c) && lexer->c != 34)
 	{
 		s = lexer_parse_string(lexer);
-        value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
-        ft_strcat(value, s);
+		value = ft_strjoin(value,s);
+        // value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
+        // ft_strcat(value, s);
         lexer_to_next(lexer);
 	}
 	if (lexer->c != 34 )
@@ -147,14 +143,15 @@ char *lexer_collect_squoted(t_lexer *lexer)
 	char* value;
 	char* s;
 
-	value = malloc(sizeof(char) * 1);
+	value = MALLOC(sizeof(char) * 1);
     value[0] = '\0';
 	lexer_to_next(lexer);	
 	while (ft_isprint(lexer->c) && lexer->c != 39)
 	{
 		s = lexer_parse_string(lexer);
-        value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
-        ft_strcat(value, s);
+        // value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
+        // ft_strcat(value, s);
+		value = ft_strjoin(value,s);
         lexer_to_next(lexer);
 	}
 	if (lexer->c != 39)
@@ -174,7 +171,7 @@ char *lexer_parse_string(t_lexer *lexer)
 {
 	char *str;
 
-	str = malloc(2 * sizeof(char));
+	str = MALLOC(2 * sizeof(char));
 	str[0] = lexer->c; 
 	str[1] = '\0'; 
 	return (str);

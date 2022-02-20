@@ -1,12 +1,13 @@
 #include "minishell.h"
 
-int ft_strlen(const char *str)
+unsigned int ft_strlen(const char *str)
 {
 	int i;
 
 	i = 0;
-	while (str[i])
-		i++;
+	if (str)
+		while (str[i])
+			i++;
 	return (i);	
 }
 
@@ -63,11 +64,12 @@ void *ft_realloc(void *ptr,size_t size)
 {
 	void *result;
 	
-	result = malloc(size);
+	printf("{%zu}\n",size);
+		result = MALLOC(size);
 	if (!result)
 		return (NULL);
 	ft_memcpy(result,ptr,sizeof(char) * ft_strlen((char *) ptr));
-	free(ptr);
+	// free(ptr);
 	return (result);
 }
 
@@ -81,9 +83,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (start >= ft_strlen(s))
 		return (ft_strdup(""));
 	else if (len >= ft_strlen(s) - start)
-		substring = (char *) malloc(sizeof(char) * ft_strlen(s) - start);
+		substring = (char *) MALLOC(sizeof(char) * ft_strlen(s) - start + 1);
 	else
-		substring = (char *) malloc(sizeof(char) * len + 1);
+		substring = (char *) MALLOC(sizeof(char) * len + 1);
 	if (!substring)
 		return (0);
 	i = 0;
@@ -103,18 +105,22 @@ char	*ft_strdup(const char *s1)
 	char	*ret;
 
 	len = 0;
-	while (s1[len])
-		len++;
-	ret = malloc(sizeof(char) * (len + 1));
-	if (ret)
+	ret = NULL;
+	if (s1)
 	{
-		i = 0;
-		while (s1[i])
+		while (s1[len])
+			len++;
+		ret = MALLOC(sizeof(char) * (len + 1));
+		if (ret)
 		{
-			ret[i] = s1[i];
-			i++;
+			i = 0;
+			while (s1[i])
+			{
+				ret[i] = s1[i];
+				i++;
+			}
+			ret[i] = '\0';
 		}
-		ret[i] = '\0';
 	}
 	return (ret);
 }
@@ -150,7 +156,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (*s1 == '\0' && *s2 == '\0')
 		return (ft_strdup("\0"));
 	string = (char *)
-		malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) - 1));
+		MALLOC(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (string)
 	{
 		while (*s1)

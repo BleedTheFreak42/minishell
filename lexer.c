@@ -38,11 +38,8 @@ t_token *lexer_next_token(t_lexer *lexer)
 			return (lexer_get_token(lexer,init_token(TOKEN_PIPE,lexer_parse_string(lexer))));
 		if (lexer->c == '<')
 			return(lexer_collect_redirection(lexer,0));
-			// return (lexer_get_token(lexer,init_token(TOKEN_LTEHN,lexer_parse_string(lexer))));
 		if (lexer->c == '>')
 			return(lexer_collect_redirection(lexer,1));
-		// 	return (lexer_get_token(lexer,init_token(TOKEN_GTEHN,lexer_parse_string(lexer))));
-		// if (ft_isprint(lexer->c))
 			return (lexer_collect_word(lexer));
 	}
 	return (NULL);
@@ -59,8 +56,6 @@ t_token *lexer_collect_redirection(t_lexer *lexer, int type)
 	{
 		s = lexer_parse_string(lexer);
 		value = ft_strjoin(value,s);
-		// value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
-		// ft_strcat(value, s);
 		lexer_to_next(lexer);
 	}
 	if (ft_strlen(value) > 2)
@@ -93,22 +88,17 @@ t_token *lexer_collect_word(t_lexer *lexer)
 			value1 = lexer_collect_dquoted(lexer);
 			if (value1)
 				value = ft_strjoin(value,value1);
-        		// ft_strcat(value, value1);
 		}
 		else if (lexer->c == 39)
 		{
 			value1 = lexer_collect_squoted(lexer);
 			if (value1)
-        		// ft_strcat(value, value1);
 				value = ft_strjoin(value,value1);
-			// free(value1);
 		}
 		else
 		{
 			s = lexer_parse_string(lexer);
 			value = ft_strjoin(value,s);
-			// value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
-			// ft_strcat(value, s);
 			lexer_to_next(lexer);
 		}
 	}
@@ -127,8 +117,6 @@ char *lexer_collect_dquoted(t_lexer *lexer)
 	{
 		s = lexer_parse_string(lexer);
 		value = ft_strjoin(value,s);
-        // value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
-        // ft_strcat(value, s);
         lexer_to_next(lexer);
 	}
 	if (lexer->c != 34 )
@@ -149,8 +137,6 @@ char *lexer_collect_squoted(t_lexer *lexer)
 	while (ft_isprint(lexer->c) && lexer->c != 39)
 	{
 		s = lexer_parse_string(lexer);
-        // value = ft_realloc(value, (ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
-        // ft_strcat(value, s);
 		value = ft_strjoin(value,s);
         lexer_to_next(lexer);
 	}

@@ -1,8 +1,23 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/02/21 09:05:54 by ytaya             #+#    #+#              #
+#    Updated: 2022/02/21 21:26:04 by ytaya            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 name = minishell
 SRC = main.c libft.c lexer.c tokenizer.c xmalloc.c xexit.c parser.c
 
 all:
 	gcc $(SRC) -L/usr/include -lreadline -Wall -Wextra -Werror -o $(name) -fsanitize=address -g3 && ./minishell
+
+# all:
+# 	gcc $(SRC) -L/usr/include -lreadline -Wall -Wextra -Werror -o $(name)  && ./minishell
 
 # to check memory leaks
 

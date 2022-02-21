@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
+/*   Updated: 2022/02/21 21:35:22 by ytaya            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "./memwatch-2.71/memwatch.h"
 
@@ -167,7 +179,6 @@ void ft_export(char *parm)
 	while (g_cmd.env_p[i])
 	{
 		ret[i] = ft_strdup(g_cmd.env_p[i], 0);
-		// free(g_cmd.env_p[i]);
 		i++;
 	}
 	ret[i] = ft_strdup(parm, 0);
@@ -189,6 +200,25 @@ void ft_exit()
 	free(g_cmd.env_p);
 	leakcheck();
 	exit(0);
+}
+
+void ft_print()
+{
+	t_tokenlst *head;
+	head = g_cmd.tokens;
+	while (head)
+	{
+		if (head->prev)
+			printf("Prev %s\n",head->prev->token->value);
+		else
+			printf("NULL\n");
+		printf("Actual %s\n",head->token->value);
+		if (head->next)
+			printf("Next %s\n",head->next->token->value);
+		else
+			printf("NULL\n");
+		head = head->next;
+	}
 }
 
 int main(int argc, char const *argv[],char **envp)
@@ -215,10 +245,11 @@ int main(int argc, char const *argv[],char **envp)
 				g_cmd.tokens = ft_lstnew(token);
 			while (token)
 			{
-				printf("TOKEN(%d,%s)\n",token->e_type,token->value);
 				token = lexer_next_token(lexer);
-				ft_lstadd_back(&g_cmd.tokens,ft_lstnew(token));
+				if (token)
+					ft_lstadd_back(&g_cmd.tokens,ft_lstnew(token));
 			}
+			// ft_print();
 		}
 		else
 			printf("Error\n");

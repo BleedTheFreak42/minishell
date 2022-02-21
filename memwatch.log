@@ -1,17 +1,8 @@
 
 ============= MEMWATCH 2.71 Copyright (C) 1992-1999 Johan Lindh =============
 
-Started at Mon Feb 21 07:44:52 2022
+Started at Mon Feb 21 21:25:01 2022
 
 Modes: __STDC__ 64-bit mwDWORD==(unsigned int)
 mwROUNDALLOC==8 sizeof(mwData)==56 mwDataSize==56
 
-
-Stopped at Mon Feb 21 07:45:14 2022
-
-
-Memory usage statistics (global):
- N)umber of allocations made: 1
- L)argest memory usage      : 376
- T)otal of all alloc() calls: 376
- U)nfreed bytes totals      : 0

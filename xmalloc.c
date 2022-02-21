@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 15:42:00 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/02/21 02:39:50 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/21 07:41:45 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,5 @@ void	leakcheck(void)
 		c++;
 		g_cmd.tmp = g_cmd.tmp->next;
 	}
-	printf("leak check : %zu\n", c);
+	printf("\nleak check : %zu\n", c);
 }

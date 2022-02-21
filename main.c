@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include "./memwatch-2.71/memwatch.h"
 
 char *ft_expand(char *str)
 {
@@ -67,7 +68,6 @@ char *ft_expandall(char *str)
 	char *result;
 
 	nb = get_nbdollar(str);
-	// printf("nbdoolar : %d\n",nb);
 	result = str;
 	if (nb == -1)
 		return(NULL);
@@ -160,16 +160,19 @@ void ft_export(char *parm)
 	unsigned int i;
 	char	**ret;
 
+	ret = NULL;
 	g_cmd.env_len++;
 	ret = (char **) malloc(sizeof(char *) * (g_cmd.env_len + 2));
 	i = 0;
 	while (g_cmd.env_p[i])
 	{
 		ret[i] = ft_strdup(g_cmd.env_p[i], 0);
+		// free(g_cmd.env_p[i]);
 		i++;
 	}
 	ret[i] = ft_strdup(parm, 0);
 	ret[++i] = NULL;
+	free(g_cmd.env_p);
 	g_cmd.env_p = ret;
 }
 
@@ -180,6 +183,12 @@ void ft_printenv()
 	i = 0;
 	while (g_cmd.env_p[i])
 		printf("%s\n",g_cmd.env_p[i++]);
+}
+void ft_exit()
+{
+	free(g_cmd.env_p);
+	leakcheck();
+	exit(0);
 }
 
 int main(int argc, char const *argv[],char **envp)
@@ -194,6 +203,7 @@ int main(int argc, char const *argv[],char **envp)
 	g_cmd.env_p = add_env(envp);
 	while (1)
 	{
+		signal(2,ft_exit);
 		str = readline("minishell : ");
 		ft_export("F=test");
 		if (str && !ft_check_syntax(str))
@@ -213,7 +223,6 @@ int main(int argc, char const *argv[],char **envp)
 		else
 			printf("Error\n");
 		xflush();
-		// leakcheck();
 	}
 	//free all elemets of g_cmd.env_p  done!
 	// ft_free_env(&g_cmd.env_p);

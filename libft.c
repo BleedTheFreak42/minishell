@@ -64,7 +64,6 @@ void *ft_realloc(void *ptr,size_t size)
 {
 	void *result;
 	
-	printf("{%zu}\n",size);
 		result = MALLOC(size);
 	if (!result)
 		return (NULL);
@@ -81,7 +80,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (!s)
 		return (NULL);
 	if (start >= ft_strlen(s))
-		return (ft_strdup(""));
+		return (ft_strdup("", 1));
 	else if (len >= ft_strlen(s) - start)
 		substring = (char *) MALLOC(sizeof(char) * ft_strlen(s) - start + 1);
 	else
@@ -98,7 +97,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (substring);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(const char *s1, int f)
 {
 	int		len;
 	int		i;
@@ -110,7 +109,10 @@ char	*ft_strdup(const char *s1)
 	{
 		while (s1[len])
 			len++;
-		ret = MALLOC(sizeof(char) * (len + 1));
+		if (f)
+			ret = MALLOC(sizeof(char) * (len + 1));
+		else
+			ret = malloc(sizeof(char) * (len + 1));
 		if (ret)
 		{
 			i = 0;
@@ -154,7 +156,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (!(s1) || !(s2))
 		return (NULL);
 	if (*s1 == '\0' && *s2 == '\0')
-		return (ft_strdup("\0"));
+		return (ft_strdup("\0", 1));
 	string = (char *)
 		MALLOC(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (string)
@@ -188,5 +190,43 @@ char	*ft_strchrq(const char *s, int c)
 	}
 	if (c == '\0')
 		return ((char *) s);
+	return (0);
+}
+
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+{
+	size_t	i;
+	size_t	j;
+
+	j = 0;
+	i = 0;
+	if (haystack == needle || (len == 0 && *needle == '\0'))
+		return ((char *) haystack);
+	while (haystack[i] && i < len && haystack[i] != '=')
+	{
+		j = 0;
+		while (haystack[i + j] && needle[j]
+			&& haystack[i + j] == needle[j] && (i + j) < len)
+			j++;
+		if (!needle[j])
+			return ((char *) &haystack[i]);
+		i++;
+	}
+	return (0);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	if (s)
+	{
+		while (*s)
+		{
+			if (*s == (char)c)
+				return ((char *) s);
+			s++;
+		}
+		if (c == '\0')
+			return ((char *) s);
+	}
 	return (0);
 }

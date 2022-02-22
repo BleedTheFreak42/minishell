@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/22 07:08:17 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/22 23:55:32 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,9 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char	*ft_strchr(const char *s, int c);
 char	*ft_getenv(char **envp,char *var);
 t_token *init_token(int type, char *value);
-
+t_list *ft_initargs();
+t_list *ft_initfiles();
+t_list *init_commands();
+t_command *init_command();
+t_files *init_file(int type,char *value);
 #endif

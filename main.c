@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/22 07:48:49 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/23 00:11:21 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,38 @@ t_files *init_file(int type,char *value)
 	return (file);
 }
 
+t_command *init_command()
+{
+	t_command *command;
+	
+	command = malloc(sizeof(t_command));
+	command->file = ft_initfiles();
+	command->args = ft_initargs();
+	return (command);
+}
+
+t_list *init_commands()
+{
+	t_list *tmp;
+	t_list *commands;
+	
+	int e_type;
+
+	tmp = g_cmd.tokens;
+	e_type = ((t_token *)tmp->content)->e_type;
+	commands = ft_lstnew(init_command());
+	while (e_type != 1)
+	{
+		ft_lstadd_back(&commands,ft_lstnew(init_command()));
+		if (tmp)
+			e_type = ((t_token *)tmp->content)->e_type;
+		else
+			break;
+		tmp = tmp->next;
+	}
+	return (commands);
+}
+
 t_list *ft_initfiles()
 {
 	t_list *files;
@@ -255,31 +287,35 @@ t_list *ft_initfiles()
 	e_type = ((t_token *)tmp->content)->e_type;
 	if (e_type >= 1 && e_type <= 4)
 	{
-		// save token type
 		e_ftype =((t_token *)tmp->content)->e_type;
-		//this next token
 		tmp = tmp->next;
-		// now need to indet token type to file type
 		files = ft_lstnew((init_file(e_ftype,((t_token *)tmp->content)->value)));
-		printf("type = %d\n",e_ftype);
-		printf("filename = %s\n",((t_token *)tmp->content)->value);
-		printf("type = %d\n",((t_files *)files->content)->e_ftype);
-		printf("filename = %s\n",((t_files *)files->content)->value);
-		exit(1);
 		tmp = tmp->next;
+		if (tmp)
+			e_ftype =((t_token *)tmp->content)->e_type;
+		else
+			return (files);
 	}
 	while (tmp)
 	{
 		if (e_type >= 1 && e_type <= 4)
 		{
-			files->content = ((t_token *)tmp->content)->value;
-			printf("%s\n",(char *)files->content);
-			ft_lstadd_back(&files,ft_lstnew(((t_files *)tmp->content)->value));
+			e_ftype =((t_token *)tmp->content)->e_type;
+			tmp = tmp->next;
+			ft_lstadd_back(&files,ft_lstnew((init_file(e_ftype,((t_token *)tmp->content)->value))));
+			e_ftype =((t_token *)tmp->content)->e_type;
+		}
+		else if (e_ftype == 1)
+		{
+			g_cmd.tokens = tmp;
+			return (NULL);
 		}
 		tmp = tmp->next;
 	}
-	return (NULL);
+	return (files);
 }
+
+
 t_list *ft_initargs()
 {
 	t_list *args;
@@ -292,7 +328,6 @@ t_list *ft_initargs()
 	if (e_type == TOKEN_WORD)
 	{
 		args = ft_lstnew(((t_token *)tmp->content)->value);
-		printf("%s\n",(char *)args->content);
 		tmp = tmp->next;
 	}
 	while (tmp)
@@ -301,7 +336,6 @@ t_list *ft_initargs()
 		if (e_type == TOKEN_WORD)
 		{
 			args->content = ((t_token *)tmp->content)->value;
-			printf("%s\n",(char *)args->content);
 			ft_lstadd_back(&args,ft_lstnew(((t_token *)tmp->content)->value));
 		}
 		else if (e_type >= 1 && e_type <= 4)
@@ -320,19 +354,23 @@ int main(int argc, char const *argv[],char **envp)
 	(void)  argv;
 	(void) envp;
 	char *str;
+	t_list *commands;
 
 	g_cmd.env_p = add_env(envp);
 	while (1)
 	{
 		signal(2,ft_exit);
 		str = readline("minishell : ");
-		ft_export("F=test");
+		// ft_export("F=test");
 		if (str && *str && !ft_check_syntax(str))
 		{
 			ft_inittokens(str);
-			ft_initfiles();
+			// ft_initfiles();
 			// ft_initargs();
 			// ft_print();
+			commands = init_commands();
+			// printf("%s\n",(char *)(((t_command *)commands->content)->args->content));
+			// printf("%s\n",(char *)((t_files *)((t_command *)commands->content)->file->content)->value);
 		}
 		else
 			printf("Error\n");

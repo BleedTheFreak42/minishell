@@ -1,8 +1,0 @@
-
-============= MEMWATCH 2.71 Copyright (C) 1992-1999 Johan Lindh =============
-
-Started at Mon Feb 21 21:25:01 2022
-
-Modes: __STDC__ 64-bit mwDWORD==(unsigned int)
-mwROUNDALLOC==8 sizeof(mwData)==56 mwDataSize==56
-

@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/21 21:35:22 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/22 07:48:49 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,23 +202,116 @@ void ft_exit()
 	exit(0);
 }
 
-void ft_print()
+t_token *init_token(int type, char *value)
 {
-	t_tokenlst *head;
-	head = g_cmd.tokens;
-	while (head)
+	t_token *token;
+
+	token = MALLOC(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->e_type = type;
+	token->value = value;
+	return (token);
+}
+
+void ft_inittokens(char *str)
+{
+	t_lexer *lexer;
+	t_token *token;
+
+	token = (t_token *) MALLOC(sizeof(t_token));
+	str = ft_expandall(str);
+	lexer = init_lexer(str);
+	token = lexer_next_token(lexer);
+	if (token)
+		g_cmd.tokens = ft_lstnew(token);
+	while (token)
 	{
-		if (head->prev)
-			printf("Prev %s\n",head->prev->token->value);
-		else
-			printf("NULL\n");
-		printf("Actual %s\n",head->token->value);
-		if (head->next)
-			printf("Next %s\n",head->next->token->value);
-		else
-			printf("NULL\n");
-		head = head->next;
+		printf("TOKEN(%d,%s)\n",token->e_type,token->value);
+		token = lexer_next_token(lexer);
+		if (token)
+			ft_lstadd_back(&g_cmd.tokens,ft_lstnew(token));
 	}
+}
+
+t_files *init_file(int type,char *value)
+{
+	t_files *file;
+
+	file = malloc(sizeof(t_files));
+	file->e_ftype = type;
+	file->value = value;
+	return (file);
+}
+
+t_list *ft_initfiles()
+{
+	t_list *files;
+	t_list *tmp;
+	int e_type;
+	int e_ftype;
+	
+	tmp = g_cmd.tokens;
+	e_type = ((t_token *)tmp->content)->e_type;
+	if (e_type >= 1 && e_type <= 4)
+	{
+		// save token type
+		e_ftype =((t_token *)tmp->content)->e_type;
+		//this next token
+		tmp = tmp->next;
+		// now need to indet token type to file type
+		files = ft_lstnew((init_file(e_ftype,((t_token *)tmp->content)->value)));
+		printf("type = %d\n",e_ftype);
+		printf("filename = %s\n",((t_token *)tmp->content)->value);
+		printf("type = %d\n",((t_files *)files->content)->e_ftype);
+		printf("filename = %s\n",((t_files *)files->content)->value);
+		exit(1);
+		tmp = tmp->next;
+	}
+	while (tmp)
+	{
+		if (e_type >= 1 && e_type <= 4)
+		{
+			files->content = ((t_token *)tmp->content)->value;
+			printf("%s\n",(char *)files->content);
+			ft_lstadd_back(&files,ft_lstnew(((t_files *)tmp->content)->value));
+		}
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+t_list *ft_initargs()
+{
+	t_list *args;
+	t_list *tmp;
+	int e_type;
+	
+	tmp = g_cmd.tokens;
+	e_type = ((t_token *)tmp->content)->e_type;
+	
+	if (e_type == TOKEN_WORD)
+	{
+		args = ft_lstnew(((t_token *)tmp->content)->value);
+		printf("%s\n",(char *)args->content);
+		tmp = tmp->next;
+	}
+	while (tmp)
+	{
+		e_type = ((t_token *)tmp->content)->e_type;
+		if (e_type == TOKEN_WORD)
+		{
+			args->content = ((t_token *)tmp->content)->value;
+			printf("%s\n",(char *)args->content);
+			ft_lstadd_back(&args,ft_lstnew(((t_token *)tmp->content)->value));
+		}
+		else if (e_type >= 1 && e_type <= 4)
+		{
+			g_cmd.tokens = tmp;
+			return (NULL);
+		}
+		tmp = tmp->next;
+	}
+	return (args);
 }
 
 int main(int argc, char const *argv[],char **envp)
@@ -227,8 +320,6 @@ int main(int argc, char const *argv[],char **envp)
 	(void)  argv;
 	(void) envp;
 	char *str;
-	t_lexer *lexer;
-	t_token *token;
 
 	g_cmd.env_p = add_env(envp);
 	while (1)
@@ -236,25 +327,16 @@ int main(int argc, char const *argv[],char **envp)
 		signal(2,ft_exit);
 		str = readline("minishell : ");
 		ft_export("F=test");
-		if (str && !ft_check_syntax(str))
+		if (str && *str && !ft_check_syntax(str))
 		{
-			str = ft_expandall(str);
-			lexer = init_lexer(str);
-			token = lexer_next_token(lexer);
-			if (token)
-				g_cmd.tokens = ft_lstnew(token);
-			while (token)
-			{
-				token = lexer_next_token(lexer);
-				if (token)
-					ft_lstadd_back(&g_cmd.tokens,ft_lstnew(token));
-			}
+			ft_inittokens(str);
+			ft_initfiles();
+			// ft_initargs();
 			// ft_print();
 		}
 		else
 			printf("Error\n");
 		xflush();
 	}
-	//free all elemets of g_cmd.env_p  done!
-	// ft_free_env(&g_cmd.env_p);
+	return (0);
 }

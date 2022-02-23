@@ -1,0 +1,3 @@
+gcc main.c libft.c lexer.c  xmalloc.c xexit.c list.c -L/usr/include -lreadline  -o minishell -fsanitize=address -g3 && ./minishell
+
+leak check : 0

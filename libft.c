@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:06:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/21 09:06:08 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/23 01:23:42 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,8 @@ char	*ft_strchrq(const char *s, int c)
 				i = 1;
 			else if (*s == 39 && i)
 				i = 0;
+			else if (*s == 34)
+				s++;
 			if (*s == (char)c && !i)
 				return ((char *) s);
 			s++;

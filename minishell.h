@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/22 23:55:32 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/23 08:31:27 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ typedef struct s_minihsell
 	t_link	*tmp;
 	char 	**env_p;
 	size_t	env_len;
+	t_list *commands;
 	t_list *tokens;
-	t_list cmd;
 }t_minishell;
 
 typedef struct s_files
@@ -58,6 +58,7 @@ typedef struct s_command
 	t_list	*file;
 }t_command;
 
+
 t_minishell g_cmd;
 
 int	ft_isprint(int c);
@@ -75,9 +76,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char	*ft_strchr(const char *s, int c);
 char	*ft_getenv(char **envp,char *var);
 t_token *init_token(int type, char *value);
-t_list *ft_initargs();
-t_list *ft_initfiles();
-t_list *init_commands();
-t_command *init_command();
+t_command *init_command(void *files, void *args);
 t_files *init_file(int type,char *value);
+void	append(t_list **head_ref, void *data);
 #endif

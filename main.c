@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/23 00:11:21 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/23 22:24:47 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,7 @@ void ft_printenv()
 	while (g_cmd.env_p[i])
 		printf("%s\n",g_cmd.env_p[i++]);
 }
+
 void ft_exit()
 {
 	free(g_cmd.env_p);
@@ -214,24 +215,26 @@ t_token *init_token(int type, char *value)
 	return (token);
 }
 
-void ft_inittokens(char *str)
+t_list *ft_inittokens(char *str)
 {
 	t_lexer *lexer;
 	t_token *token;
+	t_list *head;
 
 	token = (t_token *) MALLOC(sizeof(t_token));
 	str = ft_expandall(str);
 	lexer = init_lexer(str);
 	token = lexer_next_token(lexer);
 	if (token)
-		g_cmd.tokens = ft_lstnew(token);
+		head = ft_lstnew(token);
 	while (token)
 	{
-		printf("TOKEN(%d,%s)\n",token->e_type,token->value);
+		// printf("TOKEN(%d,%s)\n",token->e_type,token->value);
 		token = lexer_next_token(lexer);
 		if (token)
-			ft_lstadd_back(&g_cmd.tokens,ft_lstnew(token));
+			ft_lstadd_back(&head,ft_lstnew(token));
 	}
+	return (head);
 }
 
 t_files *init_file(int type,char *value)
@@ -244,108 +247,65 @@ t_files *init_file(int type,char *value)
 	return (file);
 }
 
-t_command *init_command()
+t_command *init_command(void *files, void *args)
 {
 	t_command *command;
 	
 	command = malloc(sizeof(t_command));
-	command->file = ft_initfiles();
-	command->args = ft_initargs();
+	command->file = files;
+	command->args = args;
 	return (command);
 }
 
-t_list *init_commands()
+t_list *init_commands(t_list *tokens)
 {
-	t_list *tmp;
-	t_list *commands;
-	
-	int e_type;
-
-	tmp = g_cmd.tokens;
-	e_type = ((t_token *)tmp->content)->e_type;
-	commands = ft_lstnew(init_command());
-	while (e_type != 1)
-	{
-		ft_lstadd_back(&commands,ft_lstnew(init_command()));
-		if (tmp)
-			e_type = ((t_token *)tmp->content)->e_type;
-		else
-			break;
-		tmp = tmp->next;
-	}
-	return (commands);
-}
-
-t_list *ft_initfiles()
-{
-	t_list *files;
-	t_list *tmp;
-	int e_type;
-	int e_ftype;
-	
-	tmp = g_cmd.tokens;
-	e_type = ((t_token *)tmp->content)->e_type;
-	if (e_type >= 1 && e_type <= 4)
-	{
-		e_ftype =((t_token *)tmp->content)->e_type;
-		tmp = tmp->next;
-		files = ft_lstnew((init_file(e_ftype,((t_token *)tmp->content)->value)));
-		tmp = tmp->next;
-		if (tmp)
-			e_ftype =((t_token *)tmp->content)->e_type;
-		else
-			return (files);
-	}
-	while (tmp)
-	{
-		if (e_type >= 1 && e_type <= 4)
-		{
-			e_ftype =((t_token *)tmp->content)->e_type;
-			tmp = tmp->next;
-			ft_lstadd_back(&files,ft_lstnew((init_file(e_ftype,((t_token *)tmp->content)->value))));
-			e_ftype =((t_token *)tmp->content)->e_type;
-		}
-		else if (e_ftype == 1)
-		{
-			g_cmd.tokens = tmp;
-			return (NULL);
-		}
-		tmp = tmp->next;
-	}
-	return (files);
-}
-
-
-t_list *ft_initargs()
-{
+	t_list *command;
 	t_list *args;
-	t_list *tmp;
+	t_list *files;
 	int e_type;
+	int i;
+	int j;
 	
-	tmp = g_cmd.tokens;
-	e_type = ((t_token *)tmp->content)->e_type;
+	i = 0;
+	j = 0;
+	args = NULL;
+	files = NULL;
 	
-	if (e_type == TOKEN_WORD)
+	while (tokens)
 	{
-		args = ft_lstnew(((t_token *)tmp->content)->value);
-		tmp = tmp->next;
-	}
-	while (tmp)
-	{
-		e_type = ((t_token *)tmp->content)->e_type;
-		if (e_type == TOKEN_WORD)
+		if (((t_token *)(tokens->content))->e_type == 5)
 		{
-			args->content = ((t_token *)tmp->content)->value;
-			ft_lstadd_back(&args,ft_lstnew(((t_token *)tmp->content)->value));
+			if (!i)
+			{
+				args = ft_lstnew(((t_token *)(tokens->content))->value);
+				i = 1;
+			}
+			else if (args)
+				ft_lstadd_back(&args,ft_lstnew(((t_token *)(tokens->content))->value));
 		}
-		else if (e_type >= 1 && e_type <= 4)
+		else if (((t_token *)(tokens->content))->e_type >= 1  && ((t_token *)(tokens->content))->e_type <= 4)
 		{
-			g_cmd.tokens = tmp;
-			return (NULL);
+			if (!j)
+			{
+				e_type = ((t_token *)(tokens->content))->e_type;
+				tokens = tokens->next;
+				files = ft_lstnew(init_file(e_type,((t_token *)(tokens->content))->value));
+				j = 1;
+			}
+			else if (files)
+			{
+				e_type = ((t_token *)(tokens->content))->e_type;
+				tokens = tokens->next;
+				ft_lstadd_back(&files,ft_lstnew(init_file(e_type,((t_token *)(tokens->content))->value)));	
+			}
 		}
-		tmp = tmp->next;
+		else if (((t_token *)(tokens->content))->e_type == 0)
+			break;
+		tokens = tokens->next;
 	}
-	return (args);
+	g_cmd.tokens = tokens;
+	command = ft_lstnew(init_command(files,args));
+	return (command);
 }
 
 int main(int argc, char const *argv[],char **envp)
@@ -354,23 +314,42 @@ int main(int argc, char const *argv[],char **envp)
 	(void)  argv;
 	(void) envp;
 	char *str;
-	t_list *commands;
-
+	t_list *tokens;
+	t_list *commands; 
+	t_list *args;
+	t_list *files;
+	// t_files *file;
+	
 	g_cmd.env_p = add_env(envp);
 	while (1)
 	{
 		signal(2,ft_exit);
 		str = readline("minishell : ");
 		// ft_export("F=test");
-		if (str && *str && !ft_check_syntax(str))
+		if (str && !ft_check_syntax(str))
 		{
-			ft_inittokens(str);
-			// ft_initfiles();
-			// ft_initargs();
-			// ft_print();
-			commands = init_commands();
-			// printf("%s\n",(char *)(((t_command *)commands->content)->args->content));
-			// printf("%s\n",(char *)((t_files *)((t_command *)commands->content)->file->content)->value);
+			tokens = ft_inittokens(str);
+			g_cmd.tokens = tokens;
+			g_cmd.commands = init_commands(g_cmd.tokens);
+			commands = g_cmd.commands;
+			while (commands)
+			{
+				args = ((t_command *)commands->content)->args;
+				while (args)
+				{
+					printf("Words = %s\n",(char *)args->content);
+					args = args->next;
+				}
+				files = ((t_command *)commands->content)->file;
+				while (files)
+				{
+					printf("type = %d\n",((t_files *)files->content)->e_ftype);
+					printf("filename = %s\n",((t_files *)files->content)->value);
+					files = files->next;
+				}
+				commands = commands->next;
+			}
+			
 		}
 		else
 			printf("Error\n");

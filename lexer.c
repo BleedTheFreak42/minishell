@@ -40,6 +40,7 @@ t_token *lexer_next_token(t_lexer *lexer)
 			return(lexer_collect_redirection(lexer,0));
 		if (lexer->c == '>')
 			return(lexer_collect_redirection(lexer,1));
+        if (ft_isprint(lexer->c))
 			return (lexer_collect_word(lexer));
 	}
 	return (NULL);
@@ -119,7 +120,7 @@ char *lexer_collect_dquoted(t_lexer *lexer)
 		value = ft_strjoin(value,s);
         lexer_to_next(lexer);
 	}
-	if (lexer->c != 34 )
+	if (lexer->c != 34)
 		return (NULL);
 	else
 		lexer_to_next(lexer);
@@ -131,8 +132,7 @@ char *lexer_collect_squoted(t_lexer *lexer)
 	char* value;
 	char* s;
 
-	value = MALLOC(sizeof(char) * 1);
-    value[0] = '\0';
+	value = ft_strdup("", 0);
 	lexer_to_next(lexer);	
 	while (ft_isprint(lexer->c) && lexer->c != 39)
 	{

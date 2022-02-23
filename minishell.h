@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/23 08:31:27 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/23 23:13:42 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINI_SHELL_H
-#define MINI_SHELL_H
+#ifndef MINISHELL_H
+#define MINISHELL_H
 
 #include <stdio.h>
 #include <unistd.h>
@@ -64,7 +64,7 @@ t_minishell g_cmd;
 int	ft_isprint(int c);
 char* ft_strcat(char* destination, const char* source);
 unsigned int ft_strlen(const char *str);
-int	ft_isalnum(int c);
+int     ft_isalnum(int c);
 void	*ft_realloc(void *ptr,size_t size);
 void	*ft_memcpy(void *dst, const void * src, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);

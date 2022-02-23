@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/23 22:46:46 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/24 00:03:00 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,7 @@ t_list *ft_inittokens(char *str)
 		head = ft_lstnew(token);
 	while (token)
 	{
-		// printf("TOKEN(%d,%s)\n",token->e_type,token->value);
+		printf("TOKEN(%d,%s)\n",token->e_type,token->value);
 		token = lexer_next_token(lexer);
 		if (token)
 			ft_lstadd_back(&head,ft_lstnew(token));
@@ -311,6 +311,29 @@ t_list *init_commands(t_list *tokens)
 	return (command);
 }
 
+int ft_check_tokens(t_list *tokens)
+{
+	t_list *tmp;
+	t_token *current;
+	t_token *next;
+
+	tmp = tokens;
+	while(tmp)
+	{
+		current = (t_token *)tmp->content;
+		next = NULL;
+		if (tmp->next)
+			next = (t_token *)tmp->next->content;
+		else if (current->e_type >= 0 && current->e_type <= 4)
+			return (1);
+		if (current && next)
+			if (current->e_type == next->e_type)
+				return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 int main(int argc, char const *argv[],char **envp)
 {
 	(void)  argc;
@@ -319,22 +342,30 @@ int main(int argc, char const *argv[],char **envp)
 	char *str;
 	t_list *tokens;
 	t_list *commands; 
-	// t_list *commands1; 
 	t_list *args;
 	t_list *files;
-	// t_files *file;
 	int i;
-	i = 0;
+
 	
 	g_cmd.env_p = add_env(envp);
 	while (1)
 	{
+		i = 0;
+		str = ft_strdup("", 1);
 		signal(2,ft_exit);
-		str = readline("minishell : ");
-		// ft_export("F=test");
+		while (!*str)
+			str = readline("minishell : ");
 		if (str && !ft_check_syntax(str))
 		{
 			tokens = ft_inittokens(str);
+			if (ft_check_tokens(tokens))
+			{
+				printf("error\n");
+				xflush();
+				leakcheck();
+				exit(0);
+				// break ;
+			}
 			g_cmd.tokens = tokens;
 			// g_cmd.commands = init_commands(g_cmd.tokens);
 			// commands = g_cmd.commands;
@@ -348,7 +379,6 @@ int main(int argc, char const *argv[],char **envp)
 				else if (commands)
 					ft_lstadd_back(&commands,init_commands(g_cmd.tokens));
 			}
-			
 			while (commands)
 			{
 				args = ((t_command *)commands->content)->args;

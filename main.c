@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/23 22:24:47 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/23 22:46:46 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,7 +300,10 @@ t_list *init_commands(t_list *tokens)
 			}
 		}
 		else if (((t_token *)(tokens->content))->e_type == 0)
+		{
+			tokens = tokens->next;
 			break;
+		}
 		tokens = tokens->next;
 	}
 	g_cmd.tokens = tokens;
@@ -316,9 +319,12 @@ int main(int argc, char const *argv[],char **envp)
 	char *str;
 	t_list *tokens;
 	t_list *commands; 
+	// t_list *commands1; 
 	t_list *args;
 	t_list *files;
 	// t_files *file;
+	int i;
+	i = 0;
 	
 	g_cmd.env_p = add_env(envp);
 	while (1)
@@ -330,8 +336,19 @@ int main(int argc, char const *argv[],char **envp)
 		{
 			tokens = ft_inittokens(str);
 			g_cmd.tokens = tokens;
-			g_cmd.commands = init_commands(g_cmd.tokens);
-			commands = g_cmd.commands;
+			// g_cmd.commands = init_commands(g_cmd.tokens);
+			// commands = g_cmd.commands;
+			while (g_cmd.tokens)
+			{
+				if (!i)
+				{
+					commands = init_commands(g_cmd.tokens);
+					i = 1;	
+				}
+				else if (commands)
+					ft_lstadd_back(&commands,init_commands(g_cmd.tokens));
+			}
+			
 			while (commands)
 			{
 				args = ((t_command *)commands->content)->args;
@@ -347,9 +364,9 @@ int main(int argc, char const *argv[],char **envp)
 					printf("filename = %s\n",((t_files *)files->content)->value);
 					files = files->next;
 				}
+				printf("================\n");
 				commands = commands->next;
 			}
-			
 		}
 		else
 			printf("Error\n");

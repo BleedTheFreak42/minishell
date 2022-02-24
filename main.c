@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/24 00:03:00 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/02/24 04:14:22 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,7 +326,7 @@ int ft_check_tokens(t_list *tokens)
 			next = (t_token *)tmp->next->content;
 		else if (current->e_type >= 0 && current->e_type <= 4)
 			return (1);
-		if (current && next)
+		if (current && next && current->e_type >= 0 && current->e_type <= 4)
 			if (current->e_type == next->e_type)
 				return (1);
 		tmp = tmp->next;

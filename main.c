@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/25 06:29:28 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/25 08:33:59 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char *ft_expand(char *str)
 		else
 		{
 			j = i;
-			while (str[i] && str[i] != 32 && str[i] != '\"' && str[i] != 39)
+			while (str[i] && str[i] != 32 && str[i] != '\"' && str[i] != 39 && ft_isalnum(str[i]))
 				i++;
 			from = ft_substr(&str[j],0,i - j);
 			result[1] = ft_getenv(g_cmd.env_p,from);
@@ -152,7 +152,7 @@ char *ft_getenv(char **envp,char *var)
 {
 	int	i;
 	char *ret;
-	int j;
+	unsigned int j;
 
 	i = 0;
 	while (envp[i])
@@ -258,7 +258,7 @@ t_files *init_file(int type,char *value)
 {
 	t_files *file;
 
-	file = malloc(sizeof(t_files));
+	file = MALLOC(sizeof(t_files));
 	file->e_ftype = type;
 	file->value = value;
 	return (file);
@@ -268,7 +268,7 @@ t_command *init_command(void *files, void *args)
 {
 	t_command *command;
 	
-	command = malloc(sizeof(t_command));
+	command = MALLOC(sizeof(t_command));
 	command->file = files;
 	command->args = args;
 	return (command);
@@ -385,11 +385,8 @@ int main(int argc, char const *argv[],char **envp)
 				xflush();
 				leakcheck();
 				exit(0);
-				// break ;
 			}
 			g_cmd.tokens = tokens;
-			// g_cmd.commands = init_commands(g_cmd.tokens);
-			// commands = g_cmd.commands;
 			while (g_cmd.tokens)
 			{
 				if (!i)

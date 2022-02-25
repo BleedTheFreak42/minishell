@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/23 23:13:42 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/02/25 03:49:01 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ typedef	struct	s_link
 	struct s_link		*next;
 }t_link;
 
+typedef struct s_qoute
+{
+    int s_q;
+    int d_q;
+}t_qoute;
+
 typedef struct s_minihsell
 {
 	t_link	*g_x;
@@ -38,6 +44,7 @@ typedef struct s_minihsell
 	size_t	env_len;
 	t_list *commands;
 	t_list *tokens;
+    t_qoute q;
 }t_minishell;
 
 typedef struct s_files
@@ -79,4 +86,6 @@ t_token *init_token(int type, char *value);
 t_command *init_command(void *files, void *args);
 t_files *init_file(int type,char *value);
 void	append(t_list **head_ref, void *data);
+int	ft_isalpha(int c);
+int	ft_isdigit(int c);
 #endif

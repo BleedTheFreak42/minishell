@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:06:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/23 01:23:42 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/25 03:49:08 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,20 +184,25 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 char	*ft_strchrq(const char *s, int c)
 {
-	int i;
+	// int i;
 
 	if(s)
 	{
-		i = 0;
+	    g_cmd.q.s_q = 0;
 		while (*s)
 		{
-			if (*s == 39 && !i)
-				i = 1;
-			else if (*s == 39 && i)
-				i = 0;
+			if (*s == 39 && !g_cmd.q.s_q)
+				g_cmd.q.s_q = 1;
+			else if (*s == 39 && g_cmd.q.s_q)
+				g_cmd.q.s_q = 0;
 			else if (*s == 34)
+            {
 				s++;
-			if (*s == (char)c && !i)
+                g_cmd.q.d_q = 0;
+            }
+            else if (*s == 34 && !g_cmd.q.d_q)
+                g_cmd.q.d_q = 1;
+			if (*s == (char)c && !g_cmd.q.s_q)
 				return ((char *) s);
 			s++;
 		}
@@ -243,4 +248,25 @@ char	*ft_strchr(const char *s, int c)
 			return ((char *) s);
 	}
 	return (0);
+}
+
+// int	ft_isalnum(int c)
+// {
+// 	return (((c >= 'a' && c <= 'z')
+// 			|| (c >= 'A' && c <= 'Z')) || (c >= '0' && c <= '9'));
+// }
+
+int	ft_isalpha(int c)
+{
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || c == '-');
+}
+
+int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+int	ft_sepspesial(int c)
+{
+	return (!ft_isalnum(c) && !ft_isdigit(c));
 }

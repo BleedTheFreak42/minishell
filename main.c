@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/24 04:14:22 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/02/25 03:37:32 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ int get_nbdollar(char *str)
 	while (str)
 	{
 		str++;
-		if (*str == 32 || *str == '$')
+		if ((*str == 32 || *str == '$' || *str == 34) && g_cmd.q.d_q)
 			return (-1);
-		else if (*str == 34)
+		else if (*str == 34 && !g_cmd.q.d_q)
 		{
-			str = ft_strchrq(str,'$');
+			// str = ft_strchrq(str,'$');
 			continue;
 		}
 		c++;
@@ -82,7 +82,7 @@ char *ft_expandall(char *str)
 	nb = get_nbdollar(str);
 	result = str;
 	if (nb == -1)
-		return(NULL);
+		return(str);
 	while (nb--)
 		result = ft_expand(result);
 	return (result);
@@ -221,6 +221,7 @@ t_list *ft_inittokens(char *str)
 	t_token *token;
 	t_list *head;
 
+    head = NULL;
 	token = (t_token *) MALLOC(sizeof(t_token));
 	str = ft_expandall(str);
 	lexer = init_lexer(str);

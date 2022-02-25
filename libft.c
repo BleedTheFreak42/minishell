@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:06:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/25 03:49:08 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/02/25 06:31:31 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,5 +268,5 @@ int	ft_isdigit(int c)
 
 int	ft_sepspesial(int c)
 {
-	return (!ft_isalnum(c) && !ft_isdigit(c));
+	return (!ft_isalnum(c) && !ft_isdigit(c) && c != '_' && c != 39 && c != 34);
 }

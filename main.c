@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/25 03:37:32 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/02/25 06:29:28 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,30 @@ char *ft_expand(char *str)
 		result[0] = ft_strdup("", 1);
 	if (str[i++] == '$')
 	{
-		j = i;
-		while (str[i] && str[i] != 32 && str[i] != '\"' && str[i] != 39)
-			i++;
-		from = ft_substr(&str[j],0,i - j);
-		// result[1] = ft_strdup(getenv(from));
-		result[1] = ft_getenv(g_cmd.env_p,from);
-		if (!result[1])
-			return (ft_strdup("", 1));
-		else if (!result[1])
-			return (ft_strdup("", 1));
+
+		if (str[i] == '\0')
+			result[1] = ft_strdup("$",1);
+		else if (ft_isdigit(str[i]))
+		{
+			j = i + 1;
+			while (str[i] && str[i] != 32 && str[i] != '\"' && str[i] != 39)
+				i++;
+			from = ft_substr(&str[j],0,i - j);
+			result[1] = from;
+		}
+		else
+		{
+			j = i;
+			while (str[i] && str[i] != 32 && str[i] != '\"' && str[i] != 39)
+				i++;
+			from = ft_substr(&str[j],0,i - j);
+			result[1] = ft_getenv(g_cmd.env_p,from);
+			if (ft_sepspesial(str[i - ft_strlen(from)]))
+				result[1] = ft_strjoin("$",from);
+		}
 		result[2] = ft_strdup(&str[i], 1);
 	}
+		
 	if (result[0] && result[1] && result[2])
 	{
 		from = ft_strjoin(ft_strjoin(result[0],result[1]),result[2]);
@@ -65,7 +77,7 @@ int get_nbdollar(char *str)
 			return (-1);
 		else if (*str == 34 && !g_cmd.q.d_q)
 		{
-			// str = ft_strchrq(str,'$');
+			str = ft_strchrq(str,'$');
 			continue;
 		}
 		c++;
@@ -140,16 +152,20 @@ char *ft_getenv(char **envp,char *var)
 {
 	int	i;
 	char *ret;
+	int j;
 
 	i = 0;
 	while (envp[i])
 	{
+		j = 0;
 		if (ft_strnstr(envp[i], var, ft_strlen(var)))
 		{
+			while (envp[i][j] && envp[i][j] != '=')
+				j++;
 			ret = ft_strchr(envp[i],'=');
 			if (!ret)
 				return(ft_strdup("", 0));
-			else
+			else if (j == ft_strlen(var))
 				return (ret + 1);
 		}
 		i++;
@@ -230,7 +246,7 @@ t_list *ft_inittokens(char *str)
 		head = ft_lstnew(token);
 	while (token)
 	{
-		printf("TOKEN(%d,%s)\n",token->e_type,token->value);
+		// printf("TOKEN(%d,%s)\n",token->e_type,token->value);
 		token = lexer_next_token(lexer);
 		if (token)
 			ft_lstadd_back(&head,ft_lstnew(token));
@@ -271,7 +287,7 @@ t_list *init_commands(t_list *tokens)
 	j = 0;
 	args = NULL;
 	files = NULL;
-	
+	command = NULL;
 	while (tokens)
 	{
 		if (((t_token *)(tokens->content))->e_type == 5)
@@ -347,6 +363,10 @@ int main(int argc, char const *argv[],char **envp)
 	t_list *files;
 	int i;
 
+	args = NULL;
+	commands = NULL;
+	files = NULL;
+	tokens = NULL;
 	
 	g_cmd.env_p = add_env(envp);
 	while (1)

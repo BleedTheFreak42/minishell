@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/25 03:49:01 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/02/25 04:32:56 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,5 @@ t_files *init_file(int type,char *value);
 void	append(t_list **head_ref, void *data);
 int	ft_isalpha(int c);
 int	ft_isdigit(int c);
+int	ft_sepspesial(int c);
 #endif

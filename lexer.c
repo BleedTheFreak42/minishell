@@ -132,7 +132,7 @@ char *lexer_collect_squoted(t_lexer *lexer)
 	char* value;
 	char* s;
 
-	value = ft_strdup("", 0);
+	value = ft_strdup("", 1);
 	lexer_to_next(lexer);	
 	while (ft_isprint(lexer->c) && lexer->c != 39)
 	{

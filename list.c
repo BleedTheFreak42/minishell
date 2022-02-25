@@ -61,23 +61,3 @@ void	ft_lstclear(t_list **lst, void (*del)(void*))
 		lst = NULL;
 	}
 }
-
-void	append(t_list **head_ref, void *data)
-{
-	t_list	*new_node;
-	t_list	*last;
-
-	last = *head_ref;
-	new_node = (t_list *)malloc(sizeof(t_list));
-	new_node->content = (void *)data;
-	new_node->next = NULL;
-	if (*head_ref == NULL)
-	{
-		*head_ref = new_node;
-		return ;
-	}
-	while (last->next != NULL)
-		last = last->next;
-	last->next = new_node;
-	return ;
-}

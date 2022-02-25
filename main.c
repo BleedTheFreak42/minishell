@@ -6,9 +6,10 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/25 08:33:59 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/25 08:42:24 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 #include "./memwatch-2.71/memwatch.h"
@@ -375,7 +376,10 @@ int main(int argc, char const *argv[],char **envp)
 		str = ft_strdup("", 1);
 		signal(2,ft_exit);
 		while (!*str)
+		{
 			str = readline("minishell : ");
+			add_history(str);
+		}
 		if (str && !ft_check_syntax(str))
 		{
 			tokens = ft_inittokens(str);

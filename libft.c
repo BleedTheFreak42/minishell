@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:06:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/25 06:31:31 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/25 06:41:13 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,12 @@ int	ft_isalnum(int c)
 
 char* ft_strcat(char* destination, const char* source)
 {
-    // make `ptr` point to the end of the destination string
     char* ptr = destination + ft_strlen(destination);
  
-    // appends characters of the source to the destination string
     while (*source != '\0') {
         *ptr++ = *source++;
     }
- 
-    // null terminate destination string
     *ptr = '\0';
- 
-    // the destination is returned by standard `strcat()`
     return destination;
 }
 
@@ -80,7 +74,6 @@ void *ft_realloc(void *ptr,size_t size)
 	if (!result)
 		return (NULL);
 	ft_memcpy(result,ptr,sizeof(char) * ft_strlen((char *) ptr));
-	// free(ptr);
 	return (result);
 }
 
@@ -184,8 +177,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 char	*ft_strchrq(const char *s, int c)
 {
-	// int i;
-
 	if(s)
 	{
 	    g_cmd.q.s_q = 0;
@@ -249,12 +240,6 @@ char	*ft_strchr(const char *s, int c)
 	}
 	return (0);
 }
-
-// int	ft_isalnum(int c)
-// {
-// 	return (((c >= 'a' && c <= 'z')
-// 			|| (c >= 'A' && c <= 'Z')) || (c >= '0' && c <= '9'));
-// }
 
 int	ft_isalpha(int c)
 {

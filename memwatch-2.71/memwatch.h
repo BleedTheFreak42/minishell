@@ -322,7 +322,9 @@
 **      johan@linkdata.se
 **
 ** The latest version of MEMWATCH may be downloaded from
+<<<<<<< HEAD
 $** http://www.linkdata.se/
+=======
 */
 
 #ifndef __MEMWATCH_H

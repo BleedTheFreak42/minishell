@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:06:32 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/22 03:34:39 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/25 06:41:29 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@ typedef struct s_token
 	}e_type;
 	char *value;
 }t_token;
-
-
-// t_token *init_token(int type, char *value);
-// t_tokenlst	*ft_lstnew(t_token *token);
-// t_tokenlst	*ft_lstlast(t_tokenlst *lst);
-// void	ft_lstadd_back(t_tokenlst **lst, t_tokenlst *new);
-// void	ft_lstdelone(t_tokenlst *lst, void (*del)(void*));
-// void	ft_lstclear(t_tokenlst **lst, void (*del)(void*));
 
 #endif
 

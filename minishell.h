@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 01:20:25 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/26 01:45:55 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <readline/readline.h>
+# include <readline/history.h>
 #include "lexer.h"
 #include "tokenizer.h"
 #include "xmalloc.h"

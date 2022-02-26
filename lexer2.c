@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list.h                                             :+:      :+:    :+:   */
+/*   lexer2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/26 09:58:20 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 09:58:24 by ytaya            ###   ########.fr       */
+/*   Created: 2022/02/26 10:34:40 by ytaya             #+#    #+#             */
+/*   Updated: 2022/02/26 10:34:52 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIST_H
-# define LIST_H
+#include "minishell.h"
 
-typedef struct s_list
+char	*lexer_parse_string(t_lexer *lexer)
 {
-	void			*content;
-	struct s_list	*next;
-}	t_list;
+	char	*str;
 
-t_list	*ft_lstnew(void *content);
-int		ft_lstsize(t_list *lst);
-t_list	*ft_lstlast(t_list *lst);
-void	ft_lstadd_back(t_list **lst, t_list *new);
-void	ft_lstdelone(t_list *lst, void (*del)(void*));
-void	ft_lstclear(t_list **lst, void (*del)(void*));
-
-#endif
+	str = xmalloc(2 * sizeof(char));
+	str[0] = lexer->c;
+	str[1] = '\0';
+	return (str);
+}

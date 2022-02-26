@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/25 08:42:24 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/26 01:33:56 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,9 +215,15 @@ void ft_printenv()
 
 void ft_exit()
 {
-	free(g_cmd.env_p);
-	leakcheck();
-	exit(0);
+	// printf("Hello\n");
+	// free(g_cmd.env_p);
+	// leakcheck();
+	// exit(0);
+	// char c;
+	// c = 68;
+	// write(0,&c,1);
+	// ;
+	rl_replace_line("",1);
 }
 
 t_token *init_token(int type, char *value)
@@ -352,6 +358,30 @@ int ft_check_tokens(t_list *tokens)
 	return (0);
 }
 
+// char *character_name_generator(const char *text, int state)
+// {
+//     static int list_index, len;
+//     char *name;
+
+//     if (!state) {
+//         list_index = 0;
+//         len = strlen(text);
+//     }
+
+//     while ((name = g_cmd.character_names[list_index++])) {
+//         if (strncmp(name, text, len) == 0) {
+//             return strdup(name);
+//         }
+//     }
+//     return NULL;
+// }
+
+// char **character_name_completion(const char *text, int start, int end)
+// {
+//     rl_attempted_completion_over = 1;
+//     return rl_completion_matches(text, character_name_generator);
+// }
+
 int main(int argc, char const *argv[],char **envp)
 {
 	(void)  argc;
@@ -369,12 +399,15 @@ int main(int argc, char const *argv[],char **envp)
 	files = NULL;
 	tokens = NULL;
 	
+	// g_cmd.character_names = ft_split("ls,clear,make,grep,cat,echo,cd,PWD,env,exit",',');
+	// rl_attempted_completion_function = character_name_completion;
 	g_cmd.env_p = add_env(envp);
 	while (1)
 	{
 		i = 0;
 		str = ft_strdup("", 1);
-		signal(2,ft_exit);
+		// signal(2,ft_exit);
+		signal(3,ft_exit);
 		while (!*str)
 		{
 			str = readline("minishell : ");

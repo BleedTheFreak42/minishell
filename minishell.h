@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/25 04:32:56 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/26 01:20:25 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_minihsell
 	t_list *commands;
 	t_list *tokens;
     t_qoute q;
+	// char **character_names;
 }t_minishell;
 
 typedef struct s_files
@@ -89,4 +90,5 @@ void	append(t_list **head_ref, void *data);
 int	ft_isalpha(int c);
 int	ft_isdigit(int c);
 int	ft_sepspesial(int c);
+char	**ft_split(char const *s, char c);
 #endif

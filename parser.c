@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 14:05:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 14:27:47 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/27 06:01:33 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_list	*ft_inittokens(char *str)
 		head = ft_lstnew(token);
 	while (token)
 	{
-		// printf("TOKEN(%d,%s)\n", token->e_type, token->value);
+		printf("TOKEN(%d,%s)\n", token->e_type, token->value);
 		token = lexer_next_token(lexer);
 		if (token)
 			ft_lstadd_back(&head, ft_lstnew(token));

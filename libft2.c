@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 10:29:29 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 10:30:17 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/27 09:15:02 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,6 @@ int	ft_isdigit(int c)
 
 int	ft_sepspesial(int c)
 {
-	return (!ft_isalnum(c) && !ft_isdigit(c) && c != '_' && c != 39 && c != 34);
+	return (!ft_isalnum(c) && !ft_isdigit(c) && c != '_'
+		&& c != 39 && c != 34 && c != '?');
 }

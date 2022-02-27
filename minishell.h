@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 14:17:50 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/27 10:42:28 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,17 @@ char			*ft_expand(char *str);
 int				ft_check_tokens(t_list *tokens);
 char			*ft_expandall(char *str);
 t_list			*ft_inittokens(char *str);
+t_list			*init_commands(t_list *tokens);
+t_list			*get_listcmd(void);
+char			**add_env(char **envp);
+int				ft_check_syntax(char *str);
+void			ft_printcommads(void);
+void			ft_export(char *parm);
+void			ft_printenv(void);
+char			*ft_exapnd_if1(int i, char *str);
+int				get_dollar_index(char *str);
+char			*ft_expand_else3(char *s1, char *s2, char *s3);
+char			*ft_expand_else2(int *i, char *str, int j);
+char			*ft_expand_else1(int *i, char *str, int j);
 
 #endif

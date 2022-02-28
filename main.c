@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 21:10:21 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/02/28 23:03:51 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -381,7 +381,19 @@ int ft_check_tokens(t_list *tokens)
 //     rl_attempted_completion_over = 1;
 //     return rl_completion_matches(text, character_name_generator);
 // }
-
+size_t list_size(t_list *list)
+{
+    t_list *head = list;
+    int i = 0;
+    while (head)
+    {
+        i++;
+        head = head->next;
+        /* code */
+    }
+    return i;
+    
+}
 int execute(t_list *cmd)
 {
 	int i;
@@ -393,9 +405,13 @@ int execute(t_list *cmd)
     p.outfd = OUTFILE;
     p.pipenb = 0;
     p.status = 0;
+    int size = list_size(cmd);
+    size = size == 1 ? 2 :  (size -1) * 2;
+    int pip[size];
+    int index =0;
+    int flag = 0;
 	while (cmd)
 	{
-		i++;
 		j = 0;
         p.arg_head = ((t_command *)cmd->content)->args;
         // p.file_head = ((t_command *)cmd->content)->file;
@@ -418,10 +434,22 @@ int execute(t_list *cmd)
             }
             p.cmd[j] = NULL;
         }
-        if (p.cmd && i == 1)
-            redir(p.cmd, g_cmd.env_p, 0, &p.status);
-        else
-            redir(p.cmd, g_cmd.env_p, 1, &p.status);
+        if (p.cmd)
+        {   
+            if (cmd->next)
+            {   
+                pipe(pip + (i * 2));
+            }else 
+            {
+                // index = -1;
+                flag = 1;
+                
+            }
+        
+            redir(p.cmd, g_cmd.env_p, pip, index, flag ,&p.status);
+        }
+        i++;
+        index++;
 	    cmd = cmd->next;
 	}
 	return (0);

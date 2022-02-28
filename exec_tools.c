@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/02/27 00:44:12 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/02/28 23:29:55 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,50 +74,78 @@ void	exec (char **cmd, char **envp)
 	write(STDERR, "\n", 1);
 	exit(127);
 }
+/*
+ls | cat | wc  
+        
+        0 1  0 1
+        3 4  5 6
+        0 1  2 3        
 
-void	redir (char **cmd, char **envp, int fd, int *status)
+            1               2               3
+        0  ====> 4      3 =====> 6       5========1
+              
+    */
+void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int *status)
 {
 	pid_t	pid;
-	int		pipes[2];
 
-	pipe(pipes);
 	pid = fork();
 	if (pid)
 	{
-        if (fd == 1)
+
+        if (index == 0 && flag == 0)
         {
             close(pipes[1]);
-            dup2(pipes[0], STDIN);
+    
         }
-        if (fd == 2)
+        else if (index  != 0 && flag == 1)
         {
-            close(pipes[1]);
-            dup2(pipes[0], STDIN);
+            close(pipes[(index*2) - 1]);
+ 
         }
-        if (fd == 1)
+        else
         {
-            close(pipes[1]);
-            dup2(pipes[0], STDIN);
-        }
-		waitpid(pid, status, 0);
+
+       
+              
+            close(pipes[(index *2)-2]);
+            close(pipes[ (index *2) +1]);
+
+            
+        }        *status = 0;
 	}
-	else
+	else if (pid == 0)
 	{
-        // cmd first cmd
-        if (fd == 1)
+    
+        if (index == 0 && flag == 0)
         {
+            dprintf(2,"first*****%d****das\n", pipes[1]);
             close(pipes[0]);
-            dup2(pipes[1], STDOUT);
+            dup2(pipes[1], 1);
         }
-        // last
-        if (fd == 2)
+        else if (index  != 0 && flag == 1)
         {
-            close(pipes[1]);
-            dup2(pipes[0], STDOUT);
+            dprintf(2,"last *** %d ** ****das\n",pipes[(index*2 ) -1]);
+
+            dup2(pipes[(index*2) - 1], 0);
         }
-        
+        else
+        {
+
+            dprintf(2,"midlle*** IN **%d****das\n", pipes[(index *2) -2 ]);
+            dprintf(2,"midlle*****%d****das\n", pipes[ (index *2 ) +1 ] );
+            //  close(pipes[(index *2)-1]);
+            //  close(pipes[(index *2)]);
+
+             
+            dup2(pipes[(index *2)-1], 0 );
+            dup2(pipes[ (index *2) +1], 1);
+        }
 		exec(cmd, envp);
-	}
+	}else {
+        perror("minishell");
+        exit(0);
+    }
 }
 
 char	*here_doc(char *path, char **av)

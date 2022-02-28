@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 09:52:54 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/02/28 22:47:12 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,6 @@ int	ft_isalpha(int c);
 int	ft_isdigit(int c);
 int	ft_sepspesial(int c);
 char	**ft_split(char *s, char c);
+void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int *status);
+size_t list_size(t_list *list);
 #endif

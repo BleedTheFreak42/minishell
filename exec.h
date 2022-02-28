@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 03:16:09 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/02/26 10:55:19 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/02/28 22:23:41 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char	*join_path (char *path, char *bin);
 int		ft_strncmp (char *str1, char *str2, int n);
 int		openfile (char *filename, int mode);
 char	*here_doc(char *path, char **av);
-void	redir (char **cmd, char **envp, int fd, int *status);
 void	exec (char **cmd, char **envp);
 int     ft_strncmp (char *s1, char *s2, int n);
 char	*getPath (char **cmd, char **envp);

@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/01 00:11:04 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/01 00:48:11 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,47 +102,37 @@ void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int *sta
         {
             close(pipes[(index * 2) - 2]);
         }
+        else if (index == 0 && flag == 1)
+            ;
         else
         {
-            close(pipes[  (index *2 ) +1]);
+            close(pipes[ (index *2 ) +1]);
             close(pipes[(index *2) -2 ] );
-        }       
-        
+        }
          *status = 0;
 	}
 	else if (pid == 0)
 	{
-    
-        if (index == 0 && flag == 0)
+        if (index == 0 && flag == 1)
+            ;
+        else if (index == 0 && flag == 0)
         {
-            dprintf(2,"first*****%d****das\n", pipes[1]);
-            // close(pipes[0]);
-            // close(pipes[1]);
             dup2(pipes[1], 1);
         }
         else if (index  != 0 && flag == 1)
         {
-            dprintf(2,"last *** %d ** ****das\n",pipes[(index*2 ) -2]);
-
             dup2(pipes[(index*2 ) -2], 0);
             close(pipes[(index*2 ) -1]);
         }
         else
         {
-
-            dprintf(2,"midlle*** IN **  %d****das\n", pipes[(index *2) -2 ]);
-            dprintf(2,"midlle*****      %d****das\n", pipes[ (index *2 ) +1 ] );
-            //  close(pipes[(index *2)-1]);
-            //  close(pipes[(index *2)]);
-
-            // close(pipes[(index *2) -2 ] );
-            // close(pipes[  (index *2 ) +1]);  
-            dup2(pipes[  (index *2 ) +1], 1);
-            dup2(pipes[(index *2) -2 ], 0 );
-  
+            dup2(pipes[(index * 2) + 1], 1);
+            dup2(pipes[(index * 2 ) - 2], 0);
         }
 		exec(cmd, envp);
-	}else {
+	}
+    else
+    {
         perror("minishell");
         exit(0);
     }

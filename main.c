@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/01 00:13:07 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/01 00:46:50 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,8 +416,6 @@ int execute(t_list *cmd)
         pipe(pip +(i *2 ));
         i++;
     }
-    
-
 	while (cmd)
 	{
 		j = 0;
@@ -444,26 +442,13 @@ int execute(t_list *cmd)
         }
         if (p.cmd)
         {   
-            if (cmd->next)
-            {   
-                /*
-                    0
-                    2
-                    4
-                
-                */
-               
-            }else 
-            {
+            if (!cmd->next)
                 flag = 1;
-            }
-        
             redir(p.cmd, g_cmd.env_p, pip, index, flag ,&p.status);
         }
         i++;
         index++;
 	    cmd = cmd->next;
-
 	}
     i = 0;
         while (i < size2 *2)

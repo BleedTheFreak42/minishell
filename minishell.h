@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 01:45:55 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/26 09:52:54 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include "tokenizer.h"
 #include "xmalloc.h"
 #include "list.h"
+#include "exec.h"
 
 typedef	struct	s_link
 {
@@ -32,9 +33,15 @@ typedef	struct	s_link
 
 typedef struct s_qoute
 {
-    int s_q;
-    int d_q;
+	int s_q;
+	int d_q;
 }t_qoute;
+
+typedef struct s_cmd
+{
+	t_list *word;
+	t_list *files;
+} t_cmd;
 
 typedef struct s_minihsell
 {
@@ -45,7 +52,8 @@ typedef struct s_minihsell
 	size_t	env_len;
 	t_list *commands;
 	t_list *tokens;
-    t_qoute q;
+	t_qoute q;
+	t_cmd	**curr_cmd;
 	// char **character_names;
 }t_minishell;
 
@@ -66,7 +74,6 @@ typedef struct s_command
 	t_list	*args;
 	t_list	*file;
 }t_command;
-
 
 t_minishell g_cmd;
 
@@ -91,5 +98,5 @@ void	append(t_list **head_ref, void *data);
 int	ft_isalpha(int c);
 int	ft_isdigit(int c);
 int	ft_sepspesial(int c);
-char	**ft_split(char const *s, char c);
+char	**ft_split(char *s, char c);
 #endif

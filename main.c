@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 01:33:56 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/02/26 21:10:21 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ void ft_exit()
 	// c = 68;
 	// write(0,&c,1);
 	// ;
-	rl_replace_line("",1);
+	// rl_replace_line("",1);
 }
 
 t_token *init_token(int type, char *value)
@@ -244,7 +244,7 @@ t_list *ft_inittokens(char *str)
 	t_token *token;
 	t_list *head;
 
-    head = NULL;
+	head = NULL;
 	token = (t_token *) MALLOC(sizeof(t_token));
 	str = ft_expandall(str);
 	lexer = init_lexer(str);
@@ -326,7 +326,7 @@ t_list *init_commands(t_list *tokens)
 		else if (((t_token *)(tokens->content))->e_type == 0)
 		{
 			tokens = tokens->next;
-			break;
+			break ;
 		}
 		tokens = tokens->next;
 	}
@@ -382,6 +382,51 @@ int ft_check_tokens(t_list *tokens)
 //     return rl_completion_matches(text, character_name_generator);
 // }
 
+int execute(t_list *cmd)
+{
+	int i;
+	int j;
+    t_pipe p;
+
+	i = 0;
+    p.infd = INFILE;
+    p.outfd = OUTFILE;
+    p.pipenb = 0;
+    p.status = 0;
+	while (cmd)
+	{
+		i++;
+		j = 0;
+        p.arg_head = ((t_command *)cmd->content)->args;
+        // p.file_head = ((t_command *)cmd->content)->file;
+        while (p.arg_head)
+        {
+            j++;
+            p.arg_head = p.arg_head->next;
+        }
+        p.arg_head = ((t_command *)cmd->content)->args;
+        if (j)
+        {
+            p.cmd = (char **)MALLOC(sizeof(char *) * (j + 1));
+            j = 0;
+            while (p.arg_head)
+            {
+                p.cmd[j] = ft_strdup((char *)p.arg_head->content, 1);
+                printf("{%s}\n",p.cmd[j]);
+                j++;
+                p.arg_head = p.arg_head->next;
+            }
+            p.cmd[j] = NULL;
+        }
+        if (p.cmd && i == 1)
+            redir(p.cmd, g_cmd.env_p, 0, &p.status);
+        else
+            redir(p.cmd, g_cmd.env_p, 1, &p.status);
+	    cmd = cmd->next;
+	}
+	return (0);
+}
+
 int main(int argc, char const *argv[],char **envp)
 {
 	(void)  argc;
@@ -398,7 +443,6 @@ int main(int argc, char const *argv[],char **envp)
 	commands = NULL;
 	files = NULL;
 	tokens = NULL;
-	
 	// g_cmd.character_names = ft_split("ls,clear,make,grep,cat,echo,cd,PWD,env,exit",',');
 	// rl_attempted_completion_function = character_name_completion;
 	g_cmd.env_p = add_env(envp);
@@ -434,24 +478,26 @@ int main(int argc, char const *argv[],char **envp)
 				else if (commands)
 					ft_lstadd_back(&commands,init_commands(g_cmd.tokens));
 			}
-			while (commands)
-			{
-				args = ((t_command *)commands->content)->args;
-				while (args)
-				{
-					printf("Words = %s\n",(char *)args->content);
-					args = args->next;
-				}
-				files = ((t_command *)commands->content)->file;
-				while (files)
-				{
-					printf("type = %d\n",((t_files *)files->content)->e_ftype);
-					printf("filename = %s\n",((t_files *)files->content)->value);
-					files = files->next;
-				}
-				printf("================\n");
-				commands = commands->next;
-			}
+            if (commands)
+			    execute(commands);
+			// while (commands)
+			// {
+			// 	args = ((t_command *)commands->content)->args;
+			// 	while (args)
+			// 	{
+			// 		printf("Words = %s\n",(char *)args->content);
+			// 		args = args->next;
+			// 	}
+			// 	files = ((t_command *)commands->content)->file;
+			// 	while (files)
+			// 	{
+			// 		printf("type = %d\n",((t_files *)files->content)->e_ftype);
+			// 		printf("filename = %s\n",((t_files *)files->content)->value);
+			// 		files = files->next;
+			// 	}
+			// 	printf("================\n");
+			// 	commands = commands->next;
+			// }
 		}
 		else
 			printf("Error\n");

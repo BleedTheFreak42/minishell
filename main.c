@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/28 23:03:51 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/01 00:13:07 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,6 +410,14 @@ int execute(t_list *cmd)
     int pip[size];
     int index =0;
     int flag = 0;
+    int size2 = list_size(cmd) -1 ;
+    while (i < size2)
+    {
+        pipe(pip +(i *2 ));
+        i++;
+    }
+    
+
 	while (cmd)
 	{
 		j = 0;
@@ -438,12 +446,16 @@ int execute(t_list *cmd)
         {   
             if (cmd->next)
             {   
-                pipe(pip + (i * 2));
+                /*
+                    0
+                    2
+                    4
+                
+                */
+               
             }else 
             {
-                // index = -1;
                 flag = 1;
-                
             }
         
             redir(p.cmd, g_cmd.env_p, pip, index, flag ,&p.status);
@@ -451,7 +463,20 @@ int execute(t_list *cmd)
         i++;
         index++;
 	    cmd = cmd->next;
+
 	}
+    i = 0;
+        while (i < size2 *2)
+    {
+        close(*(pip +i));
+        i++;
+    }
+
+    while (waitpid(-1, NULL, 0) != - 1)
+    {
+        /* code */
+    }
+    
 	return (0);
 }
 

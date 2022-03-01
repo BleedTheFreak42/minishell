@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/01 00:46:50 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/01 02:20:00 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,7 +420,7 @@ int execute(t_list *cmd)
 	{
 		j = 0;
         p.arg_head = ((t_command *)cmd->content)->args;
-        // p.file_head = ((t_command *)cmd->content)->file;
+        p.file_head = ((t_command *)cmd->content)->file;
         while (p.arg_head)
         {
             j++;
@@ -440,11 +440,18 @@ int execute(t_list *cmd)
             }
             p.cmd[j] = NULL;
         }
+        while (p.file_head)
+        {
+            p.file = (t_files *) p.file_head->content;
+            p.outfd = openfile(p.file->value, p.file->e_ftype);
+            printf("|%s|, %d\n", p.file->value, p.file->e_ftype);
+            p.file_head = p.file_head->next;
+        }
         if (p.cmd)
-        {   
+        {
             if (!cmd->next)
                 flag = 1;
-            redir(p.cmd, g_cmd.env_p, pip, index, flag ,&p.status);
+            redir(p.cmd, g_cmd.env_p, pip, index, flag , p.outfd, p.file->e_ftype);
         }
         i++;
         index++;
@@ -456,11 +463,8 @@ int execute(t_list *cmd)
         close(*(pip +i));
         i++;
     }
-
     while (waitpid(-1, NULL, 0) != - 1)
-    {
-        /* code */
-    }
+        ;
     
 	return (0);
 }

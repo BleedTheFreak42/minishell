@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/01 00:48:11 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/01 02:33:04 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,25 @@ char	*getPath (char **cmd, char **envp)
 
 int	openfile (char *filename, int mode)
 {
-	if (mode == INFILE)
+	if (mode == TYPE_LTEHN)
 	{
 		if (access(filename, F_OK))
 		{
-			write(STDERR, "pipex: ", 7);
+			write(STDERR, "Minishell: ", 7);
 			write(STDERR, filename, ft_strnchr(filename, 0));
 			write(STDERR, ": No such file or directory\n", 28);
 			return (STDIN);
 		}
 		return (open(filename, O_RDONLY));
 	}
-	else if (mode == OUTFILE)
+	else if (mode == TYPE_GTEHN)
 		return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
 				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
-	else
+	else if (mode == TYPE_APPEND)
 		return (open(filename, O_CREAT | O_WRONLY | O_APPEND,
 				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
+    else
+        return (here_doc("/tmp/heredoc420", filename));
 }
 
 void	exec (char **cmd, char **envp)
@@ -74,29 +76,17 @@ void	exec (char **cmd, char **envp)
 	write(STDERR, "\n", 1);
 	exit(127);
 }
-/*
-ls | cat | wc  
-        
-        0 1  0 1
-        3 4  5 6
-        0 1  2 3        
 
-            1               2               3
-        0  ====> 4      3 =====> 6       5========1
-              
-    */
-void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int *status)
+void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int fd, int type)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid)
 	{
-
         if (index == 0 && flag == 0)
         {
             close(pipes[1]);
-            // close(pipes[0]);
         }
         else if (index  != 0 && flag == 1)
         {
@@ -106,15 +96,19 @@ void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int *sta
             ;
         else
         {
-            close(pipes[ (index *2 ) +1]);
-            close(pipes[(index *2) -2 ] );
+            close(pipes[(index * 2 ) + 1]);
+            close(pipes[(index * 2 ) - 2]);
         }
-         *status = 0;
 	}
 	else if (pid == 0)
 	{
         if (index == 0 && flag == 1)
-            ;
+        {
+            if (fd >= 0 && (type == TYPE_GTEHN || type == TYPE_APPEND))
+                dup2(fd, 1);
+            else if (fd >= 0 && (type == TYPE_LTEHN || type == TYPE_HEREDOC))
+                dup2(fd, 0);
+        }
         else if (index == 0 && flag == 0)
         {
             dup2(pipes[1], 1);
@@ -129,7 +123,8 @@ void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int *sta
             dup2(pipes[(index * 2) + 1], 1);
             dup2(pipes[(index * 2 ) - 2], 0);
         }
-		exec(cmd, envp);
+        if (type >= 1 && type <= 4)
+		    exec(cmd, envp);
 	}
     else
     {
@@ -138,7 +133,7 @@ void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int *sta
     }
 }
 
-char	*here_doc(char *path, char **av)
+int     here_doc(char *path, char *esc)
 {
 	int		infd;
 	char	*buf;
@@ -149,18 +144,18 @@ char	*here_doc(char *path, char **av)
 	infd = openfile(path, OUTFILE);
 	while (r)
 	{
-		write(1, "heredoc> ", 9);
+		write(1, "> ", 3);
 		r = read(0, buf, 1024);
 		buf[r] = '\0';
-		if ((ft_strncmp(buf, av[2], ft_strnchr(av[2], '\0')) == 0)
-			&& (ft_strnchr(av[2], '\0') == ft_strnchr(buf, '\0') - 1))
+		if ((ft_strncmp(buf, esc, ft_strnchr(esc, '\0')) == 0)
+			&& (ft_strnchr(esc, '\0') == ft_strnchr(buf, '\0') - 1))
 			break ;
 		if (ft_strnchr(buf, '\n') != -1)
 			write(infd, buf, ft_strnchr(buf, '\n') + 1);
 	}
 	close(infd);
 	free(buf);
-	return (path);
+	return (openfile(path, TYPE_LTEHN));
 }
 
 int	ft_strnchr (char *str, char c)

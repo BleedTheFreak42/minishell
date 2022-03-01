@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/28 22:47:12 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/01 02:20:19 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,6 @@ typedef struct s_minihsell
 	// char **character_names;
 }t_minishell;
 
-typedef struct s_files
-{
-	enum
-	{
-		TYPE_GTEHN = 1,
-		TYPE_LTEHN = 2,
-		TYPE_HEREDOC = 3,
-		TYPE_APPEND = 4
-	}e_ftype;
-	char *value;
-}t_files;
-
 typedef struct s_command
 {
 	t_list	*args;
@@ -99,6 +87,6 @@ int	ft_isalpha(int c);
 int	ft_isdigit(int c);
 int	ft_sepspesial(int c);
 char	**ft_split(char *s, char c);
-void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int *status);
+void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int fd, int type);
 size_t list_size(t_list *list);
 #endif

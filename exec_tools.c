@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/01 02:33:04 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/01 23:06:46 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int fd, 
 	pid_t	pid;
 
 	pid = fork();
+    (void)fd;
 	if (pid)
 	{
         if (index == 0 && flag == 0)
@@ -115,16 +116,15 @@ void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int fd, 
         }
         else if (index  != 0 && flag == 1)
         {
-            dup2(pipes[(index*2 ) -2], 0);
-            close(pipes[(index*2 ) -1]);
+            dup2(pipes[(index * 2 ) - 2], 0);
+            close(pipes[(index * 2 ) - 1]);
         }
         else
         {
             dup2(pipes[(index * 2) + 1], 1);
             dup2(pipes[(index * 2 ) - 2], 0);
         }
-        if (type >= 1 && type <= 4)
-		    exec(cmd, envp);
+		exec(cmd, envp);
 	}
     else
     {

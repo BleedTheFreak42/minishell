@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/01 02:20:19 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/02 21:09:08 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <readline/readline.h>
 # include <readline/history.h>
 #include "lexer.h"
@@ -54,7 +55,6 @@ typedef struct s_minihsell
 	t_list *tokens;
 	t_qoute q;
 	t_cmd	**curr_cmd;
-	// char **character_names;
 }t_minishell;
 
 typedef struct s_command
@@ -87,6 +87,6 @@ int	ft_isalpha(int c);
 int	ft_isdigit(int c);
 int	ft_sepspesial(int c);
 char	**ft_split(char *s, char c);
-void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int fd, int type);
+int    redir (char **cmd, char **envp, int *pipes, int index,int flag, int fd, int type);
 size_t list_size(t_list *list);
 #endif

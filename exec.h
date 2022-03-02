@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 03:16:09 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/01 01:52:14 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/02 21:10:22 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ typedef struct s_files
 {
 	enum
 	{
-		TYPE_GTEHN = 1,
-		TYPE_LTEHN = 2,
+		TYPE_GTHAN = 1,
+		TYPE_LTHAN = 2,
 		TYPE_HEREDOC = 3,
 		TYPE_APPEND = 4
 	}e_ftype;
@@ -40,19 +40,16 @@ typedef struct s_pipe
 {
 	int		infd;
 	int		outfd;
-	int		pipenb;
 	int		status;
 	char	**cmd;
-    t_files *file;
-	t_list	*arg_head;
-	t_list	*file_head;
+    t_list *files;
+	char    **arg_head;
 }	t_pipe;
 
 int		ft_strnchr (char *str, char c);
 char	*ft_strndup (char *str, unsigned int n);
 char	*join_path (char *path, char *bin);
 int		ft_strncmp (char *str1, char *str2, int n);
-int		openfile (char *filename, int mode);
 int     here_doc(char *path, char *esc);
 void	exec (char **cmd, char **envp);
 int     ft_strncmp (char *s1, char *s2, int n);

@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/01 23:06:46 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/02 21:15:56 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,29 +38,6 @@ char	*getPath (char **cmd, char **envp)
 	return (cmd[0]);
 }
 
-int	openfile (char *filename, int mode)
-{
-	if (mode == TYPE_LTEHN)
-	{
-		if (access(filename, F_OK))
-		{
-			write(STDERR, "Minishell: ", 7);
-			write(STDERR, filename, ft_strnchr(filename, 0));
-			write(STDERR, ": No such file or directory\n", 28);
-			return (STDIN);
-		}
-		return (open(filename, O_RDONLY));
-	}
-	else if (mode == TYPE_GTEHN)
-		return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
-				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
-	else if (mode == TYPE_APPEND)
-		return (open(filename, O_CREAT | O_WRONLY | O_APPEND,
-				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
-    else
-        return (here_doc("/tmp/heredoc420", filename));
-}
-
 void	exec (char **cmd, char **envp)
 {
 	char	*path;
@@ -77,62 +54,6 @@ void	exec (char **cmd, char **envp)
 	exit(127);
 }
 
-void    redir (char **cmd, char **envp, int *pipes, int index,int flag, int fd, int type)
-{
-	pid_t	pid;
-
-	pid = fork();
-    (void)fd;
-	if (pid)
-	{
-        if (index == 0 && flag == 0)
-        {
-            close(pipes[1]);
-        }
-        else if (index  != 0 && flag == 1)
-        {
-            close(pipes[(index * 2) - 2]);
-        }
-        else if (index == 0 && flag == 1)
-            ;
-        else
-        {
-            close(pipes[(index * 2 ) + 1]);
-            close(pipes[(index * 2 ) - 2]);
-        }
-	}
-	else if (pid == 0)
-	{
-        if (index == 0 && flag == 1)
-        {
-            if (fd >= 0 && (type == TYPE_GTEHN || type == TYPE_APPEND))
-                dup2(fd, 1);
-            else if (fd >= 0 && (type == TYPE_LTEHN || type == TYPE_HEREDOC))
-                dup2(fd, 0);
-        }
-        else if (index == 0 && flag == 0)
-        {
-            dup2(pipes[1], 1);
-        }
-        else if (index  != 0 && flag == 1)
-        {
-            dup2(pipes[(index * 2 ) - 2], 0);
-            close(pipes[(index * 2 ) - 1]);
-        }
-        else
-        {
-            dup2(pipes[(index * 2) + 1], 1);
-            dup2(pipes[(index * 2 ) - 2], 0);
-        }
-		exec(cmd, envp);
-	}
-    else
-    {
-        perror("minishell");
-        exit(0);
-    }
-}
-
 int     here_doc(char *path, char *esc)
 {
 	int		infd;
@@ -141,7 +62,8 @@ int     here_doc(char *path, char *esc)
 
 	r = 42;
 	buf = malloc(1025);
-	infd = openfile(path, OUTFILE);
+    infd = open(path, O_CREAT | O_WRONLY | O_TRUNC,
+	    			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 	while (r)
 	{
 		write(1, "> ", 3);
@@ -155,7 +77,7 @@ int     here_doc(char *path, char *esc)
 	}
 	close(infd);
 	free(buf);
-	return (openfile(path, TYPE_LTEHN));
+	return (open(path, O_RDONLY));
 }
 
 int	ft_strnchr (char *str, char c)

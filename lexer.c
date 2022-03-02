@@ -62,11 +62,11 @@ t_token *lexer_collect_redirection(t_lexer *lexer, int type)
 	if (ft_strlen(value) > 2)
 		return (NULL);
 	if (!type && ft_strlen(value) == 1)
-		return (init_token(TOKEN_LTEHN,value));
+		return (init_token(TOKEN_LTHAN,value));
 	else if (!type && ft_strlen(value) > 1)
 		return (init_token(TOKEN_LHEREDOC,value));
 	else if (type && ft_strlen(value) == 1)
-		return (init_token(TOKEN_GTEHN,value));
+		return (init_token(TOKEN_GTHAN,value));
 	else if (type && ft_strlen(value) > 1)
 		return (init_token(TOKEN_RHEREDOC,value));
 	else

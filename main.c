@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/01 23:13:21 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/02 21:09:54 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,84 +383,140 @@ int ft_check_tokens(t_list *tokens)
 // }
 size_t list_size(t_list *list)
 {
-    t_list *head = list;
-    int i = 0;
+    t_list *head;
+    int     i;
+
+    head = list;
+    i = 0;
     while (head)
     {
         i++;
         head = head->next;
-        /* code */
     }
-    return i;
-    
+    return (i);
 }
+
+int     execute_cmd(char **cmds, int in, int out, int fds[])
+{
+    int pid = fork();
+    if (pid == 0)
+    {
+        dup2(in, 0);
+        dup2(out, 1);
+        if (fds[0] != 0)
+            close(fds[0]);
+        if (in != 0)
+            close(in);
+        if (out != 1)
+            close(out);
+        exec(cmds, g_cmd.env_p);
+    }
+    return pid;
+}
+
+int handle_files(t_list *files, int *in, int *out)
+{
+    t_files file;
+
+    while(files)
+    {
+        file.value = ((t_files *)files->content)->value;
+        file.e_ftype = ((t_files *)files->content)->e_ftype;
+        if (file.e_ftype == TYPE_LTHAN)
+	    {
+	    	if (access(file.value, F_OK))
+	    	{
+	    		write(STDERR, "Minishell: ", 7);
+	    		write(STDERR, file.value, ft_strnchr(file.value, 0));
+	    		write(STDERR, ": No such file or directory\n", 28);
+	    		return (-1);
+	    	}
+	    	*in = open(file.value, O_RDONLY);
+	    }
+	    else if (file.e_ftype == TYPE_GTHAN)
+	    	*out = open(file.value, O_CREAT | O_WRONLY | O_TRUNC,
+	    			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+	    else if (file.e_ftype == TYPE_APPEND)
+	    	*out = open(file.value, O_CREAT | O_WRONLY | O_APPEND,
+	    			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+        else if (file.e_ftype == TYPE_HEREDOC)
+            *in = here_doc("/tmp/heredoc420", file.value);
+        files = files->next;
+    }
+    if (*in == -1 || *out == -1)
+        return (-1);
+    return (0);
+}
+
+// void manage_pipes(char **cmds, t_list *files)
+// {
+//     int in = 0;
+//     int out;
+//     int fds[2] = {0,0};
+//     int i = 0;
+//     int pids[1000];
+//     while (*cmds)
+//     {
+
+//     }
+//     for (int j = 0; j < i; j++)
+//     {
+//         int status;
+//         waitpid(pids[j], &status, 0);
+//     }
+// }
+
+char **get_cmd_args(t_list  *cmd)
+{
+    int j;
+    char **ret;
+    t_list  *cur;
+
+    ret = (char **)MALLOC(sizeof(char *) * (list_size(cmd) + 1));
+    cur = cmd;
+    j = 0;
+    while (cur)
+    {
+        ret[j] = ft_strdup((char *)cur->content, 1);
+        j++;
+        cur = cur->next;
+    }
+    ret[j] = NULL;
+    return (ret);
+}
+
 int execute(t_list *cmd)
 {
-	int i;
-	int j;
     t_pipe p;
+    int in = 0;
+    int out;
+    int fds[2] = {0,0};
+    int i = 0;
+    int pids[1000];
 
-	i = 0;
-    p.infd = INFILE;
-    p.outfd = OUTFILE;
-    p.pipenb = 0;
-    p.status = 0;
-    int size = list_size(cmd);
-    size = size == 1 ? 2 :  (size -1) * 2;
-    int pip[size];
-    int index =0;
-    int size2 = list_size(cmd) -1 ;
-    while (i < size2)
-    {
-        pipe(pip +(i *2 ));
-        i++;
-    }
-	while (cmd)
+    while (cmd)
 	{
-		j = 0;
-        p.arg_head = ((t_command *)cmd->content)->args;
-        p.file_head = ((t_command *)cmd->content)->file;
-        while (p.arg_head)
+        p.cmd = get_cmd_args(((t_command *)cmd->content)->args);
+        p.files = ((t_command *)cmd->content)->file;
+        if (cmd->next != NULL)
         {
-            j++;
-            p.arg_head = p.arg_head->next;
+            pipe(fds);
+            out = fds[1];
         }
-        p.arg_head = ((t_command *)cmd->content)->args;
-        if (j)
+        else
         {
-            p.cmd = (char **)MALLOC(sizeof(char *) * (j + 1));
-            j = 0;
-            while (p.arg_head)
-            {
-                p.cmd[j] = ft_strdup((char *)p.arg_head->content, 1);
-                printf("{%s}\n",p.cmd[j]);
-                j++;
-                p.arg_head = p.arg_head->next;
-            }
-            p.cmd[j] = NULL;
+            fds[0] = 0;
+            out = 1;
         }
-        while (p.file_head)
-        {
-            p.file = (t_files *) p.file_head->content;
-            p.outfd = openfile(p.file->value, p.file->e_ftype);
-            printf("|%s|, %d\n", p.file->value, p.file->e_ftype);
-            p.file_head = p.file_head->next;
-        }
-        if (p.cmd)
-            redir(p.cmd, g_cmd.env_p, pip, index, (!cmd->next) , p.outfd, p.file->e_ftype);
-        i++;
-        index++;
-	    cmd = cmd->next;
-	}
-    i = 0;
-        while (i < size2 *2)
-    {
-        close(*(pip +i));
-        i++;
+        handle_files(p.files, &in, &out);
+        pids[i++] = execute_cmd(p.cmd,  in, out, fds);
+        if (out != 1)
+            close(out);
+        if (in != 0)
+            close(in);
+        in = fds[0];
+        cmd = cmd->next;
     }
-    while (waitpid(-1, NULL, 0) != - 1)
-        ;
-    
 	return (0);
 }
 
@@ -510,7 +566,7 @@ int main(int argc, char const *argv[],char **envp)
 				if (!i)
 				{
 					commands = init_commands(g_cmd.tokens);
-					i = 1;	
+					i = 1;
 				}
 				else if (commands)
 					ft_lstadd_back(&commands,init_commands(g_cmd.tokens));

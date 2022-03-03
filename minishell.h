@@ -6,9 +6,10 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/03 09:57:29 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/03 11:42:46 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -54,6 +55,17 @@ typedef struct s_minihsell
 	t_qoute	q;
 }t_minishell;
 
+// typedef struct s_files
+// {
+// 	enum
+// 	{
+// 		TYPE_GTEHN = 1,
+// 		TYPE_LTEHN = 2,
+// 		TYPE_HEREDOC = 3,
+// 		TYPE_APPEND = 4
+// 	}e_ftype;
+// 	char	*value;
+// }t_files;
 // typedef struct s_files
 // {
 // 	enum

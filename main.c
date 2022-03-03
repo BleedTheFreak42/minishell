@@ -6,9 +6,10 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:01:42 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/03 11:31:58 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/03 11:41:45 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -24,6 +25,7 @@ void	ft_lunch(void)
 	t_list	*tokens;
 	int ret;
 	
+
 	tokens = NULL;
 	str = ft_strdup("", 1);
 	while (!*str)
@@ -46,6 +48,20 @@ void	ft_lunch(void)
 		else
 				p_error();
 	}
+	// if (str && !ft_check_syntax(str))
+	// {
+	// 	tokens = ft_inittokens(str);
+	// 	if (ft_check_tokens(tokens))
+	// 		p_error();
+	// 	else
+	// 	{
+	// 		g_cmd.tokens = tokens;
+	// 		ft_printcommads();
+			// g_cmd.commands = get_listcmd();
+	// 	}
+	// }
+	// else
+	// 	p_error();
 }
 
 int ft_check_type(t_list *tokens)
@@ -88,6 +104,9 @@ int	main(int argc, char const *argv[], char **envp)
 	signal_handler();
 	g_cmd.env_p = add_env(envp);
 	tokens = NULL;
+	g_cmd.env_p = add_env(envp);
+	tokens = NULL;
+	signal_handler();
 	while (1)
 	{
 		ft_lunch();

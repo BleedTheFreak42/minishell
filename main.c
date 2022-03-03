@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/02 21:09:54 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/03 08:13:09 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,7 +411,7 @@ int     execute_cmd(char **cmds, int in, int out, int fds[])
             close(out);
         exec(cmds, g_cmd.env_p);
     }
-    return pid;
+    return (pid);
 }
 
 int handle_files(t_list *files, int *in, int *out)
@@ -426,7 +426,7 @@ int handle_files(t_list *files, int *in, int *out)
 	    {
 	    	if (access(file.value, F_OK))
 	    	{
-	    		write(STDERR, "Minishell: ", 7);
+	    		write(STDERR, "Minishell: ", 12);
 	    		write(STDERR, file.value, ft_strnchr(file.value, 0));
 	    		write(STDERR, ": No such file or directory\n", 28);
 	    		return (-1);
@@ -488,35 +488,36 @@ char **get_cmd_args(t_list  *cmd)
 int execute(t_list *cmd)
 {
     t_pipe p;
-    int in = 0;
-    int out;
-    int fds[2] = {0,0};
     int i = 0;
-    int pids[1000];
+    pid_t pids[1000];
 
+    bzero(&p, sizeof(t_pipe));
     while (cmd)
 	{
         p.cmd = get_cmd_args(((t_command *)cmd->content)->args);
         p.files = ((t_command *)cmd->content)->file;
         if (cmd->next != NULL)
         {
-            pipe(fds);
-            out = fds[1];
+            pipe(p.fds);
+            p.outfd = p.fds[1];
         }
         else
         {
-            fds[0] = 0;
-            out = 1;
+            p.fds[0] = 0;
+            p.outfd = 1;
         }
-        handle_files(p.files, &in, &out);
-        pids[i++] = execute_cmd(p.cmd,  in, out, fds);
-        if (out != 1)
-            close(out);
-        if (in != 0)
-            close(in);
-        in = fds[0];
+        if (handle_files(p.files, &p.infd, &p.outfd) == -1)
+            return (-1);
+        pids[i++] = execute_cmd(p.cmd,  p.infd, p.outfd, p.fds);
+        if (p.outfd != 1)
+            close(p.outfd);
+        if (p.infd != 0)
+            close(p.infd);
+        p.infd = p.fds[0];
         cmd = cmd->next;
     }
+    for (int j = 0; j < i; j++)
+        waitpid(pids[j], &p.status, 0);
 	return (0);
 }
 
@@ -572,25 +573,11 @@ int main(int argc, char const *argv[],char **envp)
 					ft_lstadd_back(&commands,init_commands(g_cmd.tokens));
 			}
             if (commands)
-			    execute(commands);
-			// while (commands)
-			// {
-			// 	args = ((t_command *)commands->content)->args;
-			// 	while (args)
-			// 	{
-			// 		printf("Words = %s\n",(char *)args->content);
-			// 		args = args->next;
-			// 	}
-			// 	files = ((t_command *)commands->content)->file;
-			// 	while (files)
-			// 	{
-			// 		printf("type = %d\n",((t_files *)files->content)->e_ftype);
-			// 		printf("filename = %s\n",((t_files *)files->content)->value);
-			// 		files = files->next;
-			// 	}
-			// 	printf("================\n");
-			// 	commands = commands->next;
-			// }
+			    if (execute(commands) == -1)
+                {
+                    printf("Error");
+                    exit(1);
+                }
 		}
 		else
 			printf("Error\n");

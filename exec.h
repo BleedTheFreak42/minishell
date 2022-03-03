@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 03:16:09 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/03 08:09:24 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/03 08:23:42 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,13 @@ typedef struct s_files
 
 typedef struct s_pipe
 {
+    int     i;
+    int     j;
 	int		infd;
 	int		outfd;
     int     fds[2];
 	int		status;
+    pid_t   *pids;
 	char	**cmd;
     t_list *files;
 	char    **arg_head;

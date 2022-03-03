@@ -6,13 +6,30 @@
 #    By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/21 09:05:54 by ytaya             #+#    #+#              #
-#    Updated: 2022/02/27 10:39:32 by ytaya            ###   ########.fr        #
+#    Updated: 2022/03/02 16:28:41 by ytaya            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 name = minishell
 # SRC = main.c libft.c lexer.c  xmalloc.c xexit.c list.c ft_split.c
-SRC =  libft.c libft1.c libft2.c lexer.c lexer1.c lexer2.c xmalloc.c xexit.c list.c parser.c parser1.c expand.c minishell.c ft_expand_helpers.c parser2.c
+SRC =  libft.c\
+libft1.c\
+libft2.c\
+libft3.c\
+lexer.c\
+lexer1.c\
+lexer2.c\
+xmalloc.c\
+xexit.c list.c\
+parser.c\
+parser1.c\
+expand.c\
+minishell.c\
+ft_expand_helpers.c\
+parser2.c\
+signals.c\
+ft_unset.c
+
 FLAGS =  -lreadline -L /opt/homebrew/opt/readline/lib -I /opt/homebrew/opt/readline/include
 
 all:

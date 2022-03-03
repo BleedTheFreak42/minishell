@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/27 09:02:57 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/02 13:59:36 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,15 +93,15 @@ char	**add_env(char **envp)
 	return (ret);
 }
 
-void	ft_printcommads(void)
+void	ft_printcommads(t_list *commands)
 {
-	t_list	*commands;
+	// t_list	*commands;
 	t_list	*args;
 	t_list	*files;
 
 	args = NULL;
 	files = NULL;
-	commands = get_listcmd();
+	// commands = get_listcmd();
 	while (commands)
 	{
 		args = ((t_command *)commands->content)->args;

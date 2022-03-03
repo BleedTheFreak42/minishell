@@ -4,6 +4,7 @@
 		"lexer.h": "c",
 		"history.h": "c",
 		"readline.h": "c",
-		"signal.h": "c"
+		"signal.h": "c",
+		"iterator": "c"
 	}
 }

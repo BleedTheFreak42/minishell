@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 09:41:31 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 13:21:34 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/02 09:31:45 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,22 +66,24 @@ t_token	*lexer_collect_redirection(t_lexer *lexer, int type)
 
 	value = xmalloc(sizeof(char) * 1);
 	value[0] = '\0';
-	while (lexer->c != 32 && !ft_isalnum(lexer->c) && lexer->c)
+	while (ft_def(lexer->c) && !ft_isalnum(lexer->c) && lexer->c)
 	{
 		s = lexer_parse_string(lexer);
 		value = ft_strjoin(value, s);
 		lexer_to_next(lexer);
 	}
-	if (ft_strlen(value) <= 2)
-	{
-		if (!type && ft_strlen(value) == 1)
-			return (init_token(TOKEN_LTEHN, value));
-		else if (!type && ft_strlen(value) > 1)
-			return (init_token(TOKEN_LHEREDOC, value));
-		else if (type && ft_strlen(value) == 1)
-			return (init_token(TOKEN_GTEHN, value));
-		else if (type && ft_strlen(value) > 1)
-			return (init_token(TOKEN_RHEREDOC, value));
-	}
-	return (NULL);
+	if (!ft_strcmp(value,"<>"))
+		return(init_token(TOKEN_LTEHN, value));
+	else if (!strcmp(value,"><"))
+		return (init_token(TOKEN_UNKNOWN,value));	
+	else if (!type && ft_strlen(value) == 1)
+		return (init_token(TOKEN_LTEHN, value));
+	else if (!type && ft_strlen(value) == 2)
+		return (init_token(TOKEN_LHEREDOC, value));
+	else if (type == 1 && ft_strlen(value) == 1)
+		return (init_token(TOKEN_GTEHN, value));
+	else if (type == 1 && ft_strlen(value) == 2)
+		return (init_token(TOKEN_RHEREDOC, value));
+	else
+		return (init_token(TOKEN_UNKNOWN,value));
 }

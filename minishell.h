@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/27 10:42:28 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/02 16:27:43 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_files			*init_file(int type, char *value);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
 int				ft_sepspesial(int c);
-char			**ft_split(char const *s, char c);
+// char			**ft_split(char const *s, char c);
 void			p_malloc(void);
 void			ft_checkline(char **line);
 char			*ft_expand(char *str);
@@ -106,7 +106,7 @@ t_list			*init_commands(t_list *tokens);
 t_list			*get_listcmd(void);
 char			**add_env(char **envp);
 int				ft_check_syntax(char *str);
-void			ft_printcommads(void);
+void			ft_printcommads(t_list *commands);
 void			ft_export(char *parm);
 void			ft_printenv(void);
 char			*ft_exapnd_if1(int i, char *str);
@@ -114,5 +114,9 @@ int				get_dollar_index(char *str);
 char			*ft_expand_else3(char *s1, char *s2, char *s3);
 char			*ft_expand_else2(int *i, char *str, int j);
 char			*ft_expand_else1(int *i, char *str, int j);
-
+void			signal_handler(void);
+int				ft_strcmp(char *s1, char *s2);
+int				ft_def(char c);
+int				syntax_checker(char *str);
+char			**ft_unset(char *parm);
 #endif

@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:01:42 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/27 10:41:57 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/02 16:41:16 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	p_error(void)
 {
-	printf("$> Syntax error\n");
+	printf("minishell : syntax error near unexpected token\n");
 	xflush();
 }
 
@@ -24,35 +24,78 @@ void	ft_lunch(void)
 	t_list	*tokens;
 
 	tokens = NULL;
-		str = ft_strdup("", 1);
+	str = ft_strdup("", 1);
 	while (!*str)
 	{
 		str = readline("minishell : ");
+		add_history(str);
 		ft_checkline(&str);
-	}
-	if (str && !ft_check_syntax(str))
-	{
-		tokens = ft_inittokens(str);
-		if (ft_check_tokens(tokens))
+		if (syntax_checker(str) == 2)
+			continue ;
+		else if (syntax_checker(str) != 0)
 			p_error();
-		else
-		{
-			g_cmd.tokens = tokens;
-			ft_printcommads();
-		}
 	}
-	else
-		p_error();
+	// if (str && !ft_check_syntax(str))
+	// {
+	// 	tokens = ft_inittokens(str);
+	// 	if (ft_check_tokens(tokens))
+	// 		p_error();
+	// 	else
+	// 	{
+	// 		g_cmd.tokens = tokens;
+	// 		ft_printcommads();
+			// g_cmd.commands = get_listcmd();
+	// 	}
+	// }
+	// else
+	// 	p_error();
+}
+
+int ft_check_type(t_list *tokens)
+{
+	while (tokens)
+	{
+		if (((t_token *)tokens->content)->e_type != 6)
+			tokens = tokens->next;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+int syntax_checker(char *str)
+{
+	t_list *tokens;
+
+	tokens = NULL;
+	if (ft_check_syntax(str))
+		return (1);
+	tokens = ft_inittokens(str);
+	if (!tokens)
+		return (2);
+	if (ft_check_type(tokens))
+		return (3);
+	if (ft_check_tokens(tokens))
+		return (4);
+	g_cmd.tokens = tokens;
+	g_cmd.commands = get_listcmd();
+	return (0);
 }
 
 int	main(int argc, char const *argv[], char **envp)
 {
 	(void) argc;
 	(void) argv;
+	t_list *tokens;
+	
 	g_cmd.env_p = add_env(envp);
+	tokens = NULL;
+	signal_handler();
 	while (1)
 	{
 		ft_lunch();
+		// ft_printcommads(g_cmd.commands);
+		// ft_unset(NULL);
 		xflush();
 	}
 	return (0);

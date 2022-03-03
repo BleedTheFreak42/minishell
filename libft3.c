@@ -1,31 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.h                                        :+:      :+:    :+:   */
+/*   libft3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/21 09:06:32 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/02 08:33:50 by ytaya            ###   ########.fr       */
+/*   Created: 2022/02/26 10:09:15 by ytaya             #+#    #+#             */
+/*   Updated: 2022/03/02 09:31:06 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKENIZER_H
-# define TOKENIZER_H
+#include "minishell.h"
 
-typedef struct s_token
+int ft_strcmp(char *s1, char *s2)
 {
-	enum
-	{
-		TOKEN_PIPE,
-		TOKEN_GTEHN,
-		TOKEN_LTEHN,
-		TOKEN_LHEREDOC,
-		TOKEN_RHEREDOC,
-		TOKEN_WORD,
-		TOKEN_UNKNOWN
-	}e_type;
-	char	*value;
-}t_token;
+	int i;
 
-#endif
+	i = 0;
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (-1);
+		i++;
+	}
+	return (0);
+}
+
+int ft_def(char c)
+{
+	return (c != 32 && c != 34 && c != 39  && c != '|');
+}

@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 15:11:09 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/28 15:17:42 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/03 12:28:21 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@ void	init_handler(int sig)
 {
 	char	*result;
 
-	if (!*rl_line_buffer && sig)
+	(void) sig;
+	if (g_cmd.is_forked)
 	{
 		rl_on_new_line();
-		rl_redisplay();
-		write(1, "  ", 2);
+		rl_replace_line("",0);
 		write(1, "\n", 1);
-		write(1, "minishell : ", strlen("minishell : "));
 	}
 	else
 	{
@@ -39,9 +38,15 @@ void	init_handler(int sig)
 void	quit_handler(int sig)
 {
 	(void) sig;
-	rl_on_new_line();
-	rl_redisplay();
-	write(1, "  \b\b", 4);
+	
+	if (g_cmd.is_forked)
+		write(1, "Quit\n", 5);
+	else
+	{
+		rl_on_new_line();
+		rl_redisplay();
+		write(1, "  \b\b", 4);
+	}
 }
 
 void	signal_handler(void)

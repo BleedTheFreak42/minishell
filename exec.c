@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 09:47:57 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/03 09:57:45 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/04 08:46:19 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,12 +132,14 @@ int	pipe_handler(t_list *cmd, t_pipe *p)
 int execute(t_list *cmd)
 {
 	t_pipe	p;
-
+	
+	g_cmd.is_forked = 1;
 	bzero(&p, sizeof(t_pipe));
 	p.pids = (pid_t *)xmalloc(sizeof(pid_t) * list_size(cmd) + 1);
 	if (pipe_handler(cmd, &p) == -1)
 		return (-1);
 	while (p.j < p.i)
 		waitpid(p.pids[p.j++], &p.status, 0);
+	g_cmd.is_forked = 0;
 	return (0);
 }

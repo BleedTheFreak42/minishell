@@ -9,7 +9,7 @@
 			"program": "${workspaceFolder}/minishell",
 			"args": [],
 			"stopAtEntry": false,
-			"cwd": "${fileDirname}",
+			"cwd": "${fileDirname}./minishell",
 			"environment": [],
 			"externalConsole": false,
 			"MIMode": "lldb"

@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/03 11:42:46 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/03 12:16:08 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_minihsell
 	t_list	*commands;
 	t_list	*tokens;
 	t_qoute	q;
+	int 	is_forked;
 }t_minishell;
 
 // typedef struct s_files

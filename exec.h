@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 03:16:09 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/03 09:57:22 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/08 20:27:07 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ int		ft_strncmp (char *str1, char *str2, int n);
 int     here_doc(char *path, char *esc);
 void	exec (char **cmd, char **envp);
 int     ft_strncmp (char *s1, char *s2, int n);
-char	*getPath (char **cmd, char **envp);
+char	*getpath (char **cmd, char **envp);
 char	*join_path (char *path, char *bin);
 int		execute(t_list *cmd);
-
 #endif

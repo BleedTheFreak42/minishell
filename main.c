@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:01:42 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/03 11:41:45 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 00:15:07 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 void	p_error(void)
 {
 	printf("minishell : syntax error near unexpected token\n");
-	xflush();
+	g_cmd.exit_code = 258;
+	// xflush();
 }
 
 void	ft_lunch(void)
 {
 	char	*str;
 	t_list	*tokens;
-	int ret;
-	
+	int		ret;
 
 	tokens = NULL;
 	str = ft_strdup("", 1);
@@ -34,15 +34,14 @@ void	ft_lunch(void)
 		add_history(str);
 		ft_checkline(&str);
 		ret = syntax_checker(str);
-		if ( ret == 2)
+		if (ret == 2)
 			continue ;
 		else if (ret == 0)
 		{
 			if (g_cmd.commands)
 				if (execute(g_cmd.commands) == -1)
 				{
-					printf("Error");
-					exit(1);
+					// printf("Error");
 				}
 		}
 		else
@@ -86,6 +85,9 @@ int syntax_checker(char *str)
 	tokens = ft_inittokens(str);
 	if (!tokens)
 		return (2);
+	// printf("Str = %d\n",get_nbdollar(str));
+	// tokens = ft_expand_tokens(tokens);
+	// exit(0);
 	if (ft_check_type(tokens))
 		return (3);
 	if (ft_check_tokens(tokens))
@@ -100,19 +102,21 @@ int	main(int argc, char const *argv[], char **envp)
 	(void) argc;
 	(void) argv;
 	t_list *tokens;
-	
+
+	// signal_handler();
+	// g_cmd.env_p = add_env(envp);
+	// tokens = NULL;
+	tokens = NULL;
 	signal_handler();
 	g_cmd.env_p = add_env(envp);
-	tokens = NULL;
-	g_cmd.env_p = add_env(envp);
-	tokens = NULL;
-	signal_handler();
+	setup_term();
 	while (1)
 	{
 		ft_lunch();
+		// printf("%d\n", g_cmd.exit_code);
 		// ft_printcommads(g_cmd.commands);
 		// ft_unset(NULL);
-		xflush();
 	}
+	xflush();
 	return (0);
 }

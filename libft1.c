@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 10:09:15 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 11:21:59 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/03 22:55:18 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ char	*ft_strchrq(const char *s, int c)
 	if (s)
 	{
 		g_cmd.q.s_q = 0;
+		g_cmd.q.d_q = 0;
 		while (*s)
 		{
 			if (*s == 39 && !g_cmd.q.s_q)
@@ -103,10 +104,10 @@ char	*ft_strchrq(const char *s, int c)
 			else if (*s == 34)
 			{
 				s++;
-				g_cmd.q.d_q = 0;
-			}
-			else if (*s == 34 && !g_cmd.q.d_q)
 				g_cmd.q.d_q = 1;
+			}
+			else if (*s == 34 && g_cmd.q.d_q)
+				g_cmd.q.d_q = 0;
 			if (*s == (char)c && !g_cmd.q.s_q)
 				return ((char *) s);
 			if (*s)

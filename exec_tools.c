@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/03 08:14:12 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/09 02:28:19 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*getPath (char **cmd, char **envp)
+char	*getpath(char **cmd, char **envp)
 {
 	char	*path;
 	char	*dir;
@@ -28,7 +28,8 @@ char	*getPath (char **cmd, char **envp)
 	while (path && ft_strnchr(path, ':') > -1)
 	{
 		dir = ft_strndup(path, ft_strnchr(path, ':'));
-		bin = join_path(dir, cmd[0]);
+		if (dir && cmd[0])
+			bin = join_path(dir, cmd[0]);
 		free(dir);
 		if (access(bin, F_OK) == 0)
 			return (bin);
@@ -38,23 +39,28 @@ char	*getPath (char **cmd, char **envp)
 	return (cmd[0]);
 }
 
-void	exec (char **cmd, char **envp)
+void	exec(char **cmd, char **envp)
 {
 	char	*path;
 
 	if (ft_strnchr(cmd[0], '/') > -1)
 		path = cmd[0];
+	else if (*cmd[0])
+		path = getpath(cmd, envp);
 	else
-		path = getPath(cmd, envp);
+		path = cmd[0];
 	execve(path, cmd, envp);
-	write(STDERR, "minishell: ", 12);
-	write(STDERR, "command not found: ", 19);
-	write(STDERR, path, ft_strnchr(path, '\0'));
-	write(STDERR, "\n", 1);
+	if (path)
+	{
+		write(STDERR, "minishell: ", 12);
+		write(STDERR, "command not found: ", 19);
+		write(STDERR, path, ft_strnchr(path, '\0'));
+		write(STDERR, "\n", 1);
+	}
 	exit(127);
 }
 
-int     here_doc(char *path, char *esc)
+int	here_doc(char *path, char *esc)
 {
 	int		infd;
 	char	*buf;
@@ -62,37 +68,45 @@ int     here_doc(char *path, char *esc)
 
 	r = 42;
 	buf = malloc(1025);
-    infd = open(path, O_CREAT | O_WRONLY | O_TRUNC,
-	    			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
-	while (r)
+	infd = open(path, O_CREAT | O_WRONLY | O_TRUNC,
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+	if (infd < 0)
+		return (-1);
+	g_cmd.in_herdoc = infd;
+	while (r && g_cmd.in_herdoc)
 	{
 		write(1, "> ", 3);
-		r = read(0, buf, 1024);
+		if (g_cmd.in_herdoc == infd)
+			r = read(0, buf, 1024);
 		buf[r] = '\0';
-		if ((ft_strncmp(buf, esc, ft_strnchr(esc, '\0')) == 0)
-			&& (ft_strnchr(esc, '\0') == ft_strnchr(buf, '\0') - 1))
+		if (((ft_strncmp(buf, esc, ft_strnchr(esc, '\0')) == 0)
+			&& (ft_strnchr(esc, '\0') == ft_strnchr(buf, '\0') - 1)) || !g_cmd.in_herdoc)
 			break ;
-		if (ft_strnchr(buf, '\n') != -1)
+		if (ft_strnchr(buf, '\n') != -1 && *buf)
 			write(infd, buf, ft_strnchr(buf, '\n') + 1);
 	}
 	close(infd);
+	g_cmd.in_herdoc = 0;
 	free(buf);
 	return (open(path, O_RDONLY));
 }
 
-int	ft_strnchr (char *str, char c)
+int	ft_strnchr(char *str, char c)
 {
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] != c)
-		i++;
-	if (str[i] == c)
-		return (i);
+	if (str)
+	{
+		while (str[i] && str[i] != c)
+			i++;
+		if (str[i] == c)
+			return (i);
+	}
 	return (-1);
 }
 
-char	*ft_strndup (char *s, unsigned int n)
+char	*ft_strndup(char *s, unsigned int n)
 {
 	char				*ret;
 	unsigned int		i;
@@ -105,7 +119,7 @@ char	*ft_strndup (char *s, unsigned int n)
 	return (ret);
 }
 
-char	*join_path (char *path, char *bin)
+char	*join_path(char *path, char *bin)
 {
 	char	*ret;
 	int		i;
@@ -127,7 +141,7 @@ char	*join_path (char *path, char *bin)
 	return (ret);
 }
 
-int	ft_strncmp (char *s1, char *s2, int n)
+int	ft_strncmp(char *s1, char *s2, int n)
 {
 	while (--n > 0 && *s1 && *s2 && *s1 == *s2)
 	{
@@ -137,7 +151,7 @@ int	ft_strncmp (char *s1, char *s2, int n)
 	return (*s2 - *s1);
 }
 
-char	**ft_split (char *s, char sep)
+char	**ft_split(char *s, char sep)
 {
 	char	**ret;
 	int		words;

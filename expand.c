@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 14:10:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/27 10:40:46 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/07 07:55:21 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ char	*ft_expand(char *str)
 	result[0] = ft_exapnd_if1(i, str);
 	if (str[i++] == '$')
 	{
-		if (str[i] == '\0')
+		if (str[i] == '?' && i++)
+			result[1] = ft_itoa(g_cmd.exit_code);
+		else if (str[i] == '\0')
 			result[1] = ft_strdup("$", 1);
 		else if (ft_isdigit(str[i]))
 		{
@@ -39,4 +41,20 @@ char	*ft_expand(char *str)
 	if (result[0] && result[1] && result[2])
 		return (ft_expand_else3(result[0], result[1], result[2]));
 	return (NULL);
+}
+
+t_list *ft_expand_tokens(t_list *tokens)
+{
+	t_list *head;
+
+	head = tokens;
+	// tokens = g_cmd.tokens;
+
+	while (tokens)
+	{
+		if (((t_token *)tokens->content)->e_type == 5)
+			printf("%d\n",get_nbdollar(((t_token *)tokens->content)->value));
+		tokens = tokens->next;
+	}
+	return (head);
 }

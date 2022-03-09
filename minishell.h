@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/03 12:16:08 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 00:59:20 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include "xmalloc.h"
 # include "list.h"
 # include "exec.h"
+# include <termios.h>
 
 typedef struct s_link
 {
@@ -54,30 +55,10 @@ typedef struct s_minihsell
 	t_list	*tokens;
 	t_qoute	q;
 	int 	is_forked;
+	int 	exit_code;
+    int     in_herdoc;
 }t_minishell;
 
-// typedef struct s_files
-// {
-// 	enum
-// 	{
-// 		TYPE_GTEHN = 1,
-// 		TYPE_LTEHN = 2,
-// 		TYPE_HEREDOC = 3,
-// 		TYPE_APPEND = 4
-// 	}e_ftype;
-// 	char	*value;
-// }t_files;
-// typedef struct s_files
-// {
-// 	enum
-// 	{
-// 		TYPE_GTEHN = 1,
-// 		TYPE_LTEHN = 2,
-// 		TYPE_HEREDOC = 3,
-// 		TYPE_APPEND = 4
-// 	}e_ftype;
-// 	char	*value;
-// }t_files;
 
 typedef struct s_command
 {
@@ -109,7 +90,6 @@ t_files			*init_file(int type, char *value);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
 int				ft_sepspesial(int c);
-// char			**ft_split(char const *s, char c);
 void			p_malloc(void);
 void			ft_checkline(char **line);
 char			*ft_expand(char *str);
@@ -121,8 +101,8 @@ t_list			*get_listcmd(void);
 char			**add_env(char **envp);
 int				ft_check_syntax(char *str);
 void			ft_printcommads(t_list *commands);
-void			ft_export(char *parm);
-void			ft_printenv(void);
+void			ft_export(char *parm, int fd);
+void			ft_printenv(int fd);
 char			*ft_exapnd_if1(int i, char *str);
 int				get_dollar_index(char *str);
 char			*ft_expand_else3(char *s1, char *s2, char *s3);
@@ -132,5 +112,20 @@ void			signal_handler(void);
 int				ft_strcmp(char *s1, char *s2);
 int				ft_def(char c);
 int				syntax_checker(char *str);
-char			**ft_unset(char *parm);
+void			ft_unset(char *parm);
+t_list			*ft_expand_tokens(t_list *tokens);
+int				get_nbdollar(char *str);
+int				check_env(char *s);
+int				ft_comp(char *str, char *f);
+void			ft_echo(char **args);
+void			ft_pwd(int fd);
+void			ft_cd(char **path, int fd);
+void	ft_exit(char **cmds, int fd);
+char			*ft_itoa(int n);
+unsigned char	ft_atoi(const char *nptr);
+int				ft_isalnum0(int c);
+void			quit_handler(int sig);
+void			setup_term(void);
+
 #endif
+

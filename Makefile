@@ -6,12 +6,13 @@
 #    By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/21 09:05:54 by ytaya             #+#    #+#              #
-#    Updated: 2022/03/03 11:43:29 by ytaya            ###   ########.fr        #
+#    Updated: 2022/03/09 00:07:15 by ytaya            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 name = minishell
+usr = ytaya
 # SRC = main.c libft.c lexer.c  xmalloc.c xexit.c list.c ft_split.c
 SRC =  libft.c\
 libft1.c\
@@ -29,14 +30,15 @@ minishell.c\
 ft_expand_helpers.c\
 parser2.c\
 signals.c\
-ft_unset.c\
 exec.c\
-exec_tools.c
+builtin.c\
+exec_tools.c\
+ft_atoi.c
 
-FLAGS =  -lreadline -L /Users/ytaya/.brew/opt/readline/lib -I /Users/ytaya/.brew/opt/readline/include
+FLAGS =  -lreadline -L /Users/$(usr)/.brew/opt/readline/lib -I /Users/$(usr)/.brew/opt/readline/include # FLAGS =  -lreadline -L /opt/homebrew/opt/readline/lib -I /opt/homebrew/opt/readline/include
 
 all:
-	gcc $(SRC) main.c -Wall -Werror -Wextra  $(FLAGS) -o $(name) -fsanitize=address -g3 && ./minishell
+	gcc $(SRC) main.c -Wall -Werror -Wextra  $(FLAGS) -o $(name) -fsanitize=address -g3
 
 # all:
 # 	gcc $(SRC) -L/usr/include -lreadline -o $(name)  && ./minishell

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/02 13:59:36 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/06 04:31:52 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int	get_nbdollar(char *str)
 	while (str)
 	{
 		str++;
-		if ((*str == 32 || *str == '$') && g_cmd.q.d_q)
-			return (-1);
-		else if (*str == 34 && !g_cmd.q.d_q)
+		if (!g_cmd.q.d_q && (*str == 34 || *str == 39))
 			continue ;
+		if (((*str == 32 || *str == '$') && g_cmd.q.d_q) || !ft_isalnum(*str))
+			return (-1);
 		c++;
 		str = ft_strchrq(str, '$');
 	}
@@ -82,16 +82,16 @@ char	**add_env(char **envp)
 	while (envp[i])
 		i++;
 	g_cmd.env_len = i;
-	ret = (char **) malloc(sizeof(char *) * (g_cmd.env_len + 1));
+	ret = (char **) xmalloc(sizeof(char *) * (g_cmd.env_len + 1));
 	i = 0;
 	while (envp[i])
 	{
-		ret[i] = ft_strdup(envp[i], 0);
+		ret[i] = ft_strdup(envp[i], 1);
 		i++;
 	}
 	ret[i] = NULL;
 	return (ret);
-}
+} 
 
 void	ft_printcommads(t_list *commands)
 {
@@ -113,11 +113,10 @@ void	ft_printcommads(t_list *commands)
 		files = ((t_command *)commands->content)->file;
 		while (files)
 		{
-			printf("type = %d\n", ((t_files *)files->content)->e_ftype);
-			printf("filename = %s\n", ((t_files *)files->content)->value);
+			// printf("type = %d\n", ((t_files *)files->content)->e_ftype);
+			// printf("filename = %s\n", ((t_files *)files->content)->value);
 			files = files->next;
 		}
-		printf("================\n");
 		commands = commands->next;
 	}
 }

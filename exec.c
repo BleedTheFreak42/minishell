@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 09:47:57 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 06:47:17 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 22:34:45 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,8 @@ int	execute(t_list *cmd)
 		if (p.pids[p.j] == -1)
 			printf("minishell: fork: Resource temporarily unavailable");
 		waitpid(p.pids[p.j++], &p.status, 0);
+			if (WTERMSIG(p.status) == SIGQUIT)
+				write(2, "Quit : 3\n", 9);
 	}
 	if (g_cmd.is_forked == 1)
 		g_cmd.exit_code = WEXITSTATUS(p.status);

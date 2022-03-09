@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 14:07:30 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 06:52:00 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 22:50:45 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ char	**get_name_value(char *s)
 	{
 		while (s[i] && s[i] != '=')
 			i++;
+		if (s[i] == '\0')
+			return NULL;
 		name = malloc(sizeof(char) * (i + 1));
 		i = 0;
 		while (s[i])
@@ -109,6 +111,8 @@ int	check_env(char *s)
 
 	i = 0;
 	var = get_name_value(s);
+	if (var == NULL)
+		return 1;
 	env = g_cmd.env_p;
 	while (env[i])
 	{
@@ -189,6 +193,8 @@ void	ft_export(char *parm, int fd)
 	else
 	{
 		ret = get_name_value(parm);
+		if (ret == NULL)
+			return ;
 		if (!check_export_input(ret[0]))
 		{
 			printf("minishell: export: `%s': not a valid identifier\n", parm);

@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:01:42 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 00:15:07 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 22:13:27 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,8 @@ void	ft_lunch(void)
 				}
 		}
 		else
-				p_error();
+			p_error();
 	}
-	// if (str && !ft_check_syntax(str))
-	// {
-	// 	tokens = ft_inittokens(str);
-	// 	if (ft_check_tokens(tokens))
-	// 		p_error();
-	// 	else
-	// 	{
-	// 		g_cmd.tokens = tokens;
-	// 		ft_printcommads();
-			// g_cmd.commands = get_listcmd();
-	// 	}
-	// }
-	// else
-	// 	p_error();
 }
 
 int ft_check_type(t_list *tokens)
@@ -85,9 +71,6 @@ int syntax_checker(char *str)
 	tokens = ft_inittokens(str);
 	if (!tokens)
 		return (2);
-	// printf("Str = %d\n",get_nbdollar(str));
-	// tokens = ft_expand_tokens(tokens);
-	// exit(0);
 	if (ft_check_type(tokens))
 		return (3);
 	if (ft_check_tokens(tokens))
@@ -103,20 +86,13 @@ int	main(int argc, char const *argv[], char **envp)
 	(void) argv;
 	t_list *tokens;
 
-	// signal_handler();
-	// g_cmd.env_p = add_env(envp);
-	// tokens = NULL;
 	tokens = NULL;
+	setup_term();
 	signal_handler();
 	g_cmd.env_p = add_env(envp);
-	setup_term();
 	while (1)
-	{
 		ft_lunch();
-		// printf("%d\n", g_cmd.exit_code);
-		// ft_printcommads(g_cmd.commands);
-		// ft_unset(NULL);
-	}
 	xflush();
 	return (0);
+
 }

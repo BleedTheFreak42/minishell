@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 15:11:09 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 06:39:11 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 22:34:29 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void    quit_handler(int sig)
     {
         rl_on_new_line();
         rl_replace_line("",0);
-        write(1, "Quit : 3\n", 9);
+        // write(1, "Quit : 3\n", 9);
     }
     else if (g_cmd.in_herdoc)
         rl_on_new_line();

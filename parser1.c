@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 14:07:30 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/08 22:51:41 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/09 06:52:00 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,17 @@ void	ft_checkline(char **line)
 	}
 }
 
-void	ft_printenv(int fd)
+void	ft_printenv(int fd , int flag)
 {
 	int	i;
 
 	i = 0;
 	while (g_cmd.env_p[i])
 	{
-		write(fd, g_cmd.env_p[i], ft_strlen(g_cmd.env_p[i]));
+		if (flag)
+			(write(fd, "declare -x ", 12)) && write(fd, g_cmd.env_p[i], ft_strlen(g_cmd.env_p[i]));
+		else
+			write(fd, g_cmd.env_p[i], ft_strlen(g_cmd.env_p[i]));
 		write(fd, "\n", 1);
 		i++;
 	}
@@ -180,7 +183,7 @@ void	ft_export(char *parm, int fd)
 
 	if (!parm)
 	{
-		ft_printenv(fd);
+		ft_printenv(fd, 1);
 		return ;
 	}
 	else

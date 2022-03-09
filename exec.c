@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 09:47:57 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 00:58:31 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 06:47:17 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void	execute_builtin_parent(char **cmds, int fds[], t_pipe *p)
 	else if (i == 3)
 		ft_pwd(p->outfd);
 	else if (i == 4)
-		ft_printenv(p->outfd);
+		ft_printenv(p->outfd, 0);
 	else if (i == 5)
 		ft_export(cmds[1], p->outfd);
 	else if (i == 6)

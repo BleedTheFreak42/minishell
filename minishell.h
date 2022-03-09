@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 00:59:20 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 06:46:59 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ char			**add_env(char **envp);
 int				ft_check_syntax(char *str);
 void			ft_printcommads(t_list *commands);
 void			ft_export(char *parm, int fd);
-void			ft_printenv(int fd);
+void			ft_printenv(int fd, int flag);
 char			*ft_exapnd_if1(int i, char *str);
 int				get_dollar_index(char *str);
 char			*ft_expand_else3(char *s1, char *s2, char *s3);

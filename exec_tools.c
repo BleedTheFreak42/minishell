@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/09 02:28:19 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 06:43:23 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,13 @@ int	here_doc(char *path, char *esc)
 			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 	if (infd < 0)
 		return (-1);
-	g_cmd.in_herdoc = infd;
+	g_cmd.in_herdoc = 1;
 	while (r && g_cmd.in_herdoc)
 	{
 		write(1, "> ", 3);
-		if (g_cmd.in_herdoc == infd)
-			r = read(0, buf, 1024);
+		r = read(0, buf, 1024);
+		if (r < 0)
+			break ;
 		buf[r] = '\0';
 		if (((ft_strncmp(buf, esc, ft_strnchr(esc, '\0')) == 0)
 			&& (ft_strnchr(esc, '\0') == ft_strnchr(buf, '\0') - 1)) || !g_cmd.in_herdoc)

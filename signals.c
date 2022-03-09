@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 15:11:09 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 02:25:28 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 06:39:11 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,7 @@ void    init_handler(int sig)
 
     (void) sig;
     if (g_cmd.in_herdoc)
-    {
-        int i = dup(0);
-        close(0);
-        g_cmd.in_herdoc = 0;
         rl_on_new_line();
-        rl_replace_line("",0);
-        write(1, "\n", 1);
-        write(i, "\n\n", 2);
-        dup2(i, 0);
-        close(i);
-        rl_redisplay();
-        // write(1, "Quit : 3\n", 9);
-    }
     else if (g_cmd.is_forked)
     {
         rl_on_new_line();

@@ -1,0 +1,5 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory `/Users/ytaya/Desktop/minishell_last'
+gcc libft.c xmalloc.c xexit.c list.c expand.c ft_expand_helpers.c minishell.c signals.c libft1.c libft2.c libft3.c lexer.c lexer1.c lexer2.c parser.c parser1.c parser2.c parser3.c builtin.c builtin1.c builtin2.c builtin3.c builtin4.c exec.c exec1.c exec_tools.c ft_atoi.c ft_itoa.c exec_tools_helper.c ft_handle_file.c exec_tools1.c main.c -Wall -Werror -Wextra  -lreadline -L /opt/homebrew/opt/readline/lib -I /opt/homebrew/opt/readline/include -o minishell -fsanitize=address -g3
+make: Leaving directory `/Users/ytaya/Desktop/minishell_last'
+ 

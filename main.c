@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:01:42 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 02:28:03 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 08:14:45 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,15 @@ void	ft_lunch(void)
 	char	*str;
 	t_list	*tokens;
 	int		ret;
+	char	*tmp;
 
 	tokens = NULL;
 	str = ft_strdup("", 1);
 	while (!*str)
 	{
+		tmp = str;
 		str = readline("minishell : ");
+		free (tmp);
 		add_history(str);
 		ft_checkline(&str);
 		ret = syntax_checker(str);
@@ -37,12 +40,10 @@ void	ft_lunch(void)
 		else if (ret == 0)
 		{
 			if (g_cmd.commands)
-				if (execute(g_cmd.commands) == -1)
-					;
+				execute(g_cmd.commands);
 		}
 		else
 			p_error();
-		free(str);
 	}
 }
 

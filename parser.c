@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 14:05:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 00:13:21 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 08:37:38 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,11 @@ int	ft_check_tokens(t_list *tokens)
 	int		i;
 
 	i = 0;
-	if (!tokens)
-		return (1);
 	tmp = tokens;
 	while (tmp)
 	{
 		current = (t_token *)tmp->content;
-		if (current->e_type == 0 && !i && (i++ || 1))
+		if (current->e_type == 0 && !i)
 			return (1);
 		next = NULL;
 		if (tmp->next)
@@ -93,6 +91,7 @@ int	ft_check_tokens(t_list *tokens)
 			if ((current->e_type == next->e_type) || (next->e_type == 0))
 				return (1);
 		tmp = tmp->next;
+		i++;
 	}
-	return (0);
+	return (i == 0);
 }

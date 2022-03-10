@@ -6,7 +6,7 @@
 #    By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/21 09:05:54 by ytaya             #+#    #+#              #
-#    Updated: 2022/03/10 06:02:27 by ytaya            ###   ########.fr        #
+#    Updated: 2022/03/10 08:36:24 by ytaya            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,10 +44,11 @@ exec_tools_helper.c\
 ft_handle_file.c\
 exec_tools1.c
 
-FLAGS =  -lreadline -L /Users/$(usr)/.brew/opt/readline/lib -I /Users/$(usr)/.brew/opt/readline/include
+# FLAGS =  -lreadline -L /Users/$(usr)/.brew/opt/readline/lib -I /Users/$(usr)/.brew/opt/readline/include
+FLAGS = -lreadline -L /opt/homebrew/opt/readline/lib -I /opt/homebrew/opt/readline/include
 
 all:
-	gcc $(SRC) main.c -Wall -Werror -Wextra  $(FLAGS) -o $(name)
+	gcc $(SRC) main.c -Wall -Werror -Wextra  $(FLAGS) -o $(name) -fsanitize=address -g3
 # gcc $(SRC) main.c -Wall -Werror -Wextra  $(FLAGS) -o $(name) -fsanitize=address -g3
 
 

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:01:42 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 11:04:25 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/10 13:54:47 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "./includes/minishell.h"
 
 void	p_error(void)
 {
@@ -91,6 +91,6 @@ int	main(int argc, char const *argv[], char **envp)
 		ft_lunch();
 	}
 	xflush();
-    ft_free_env(&g_cmd.env_p);
+	ft_free_env(&g_cmd.env_p);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 06:00:28 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 06:00:53 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 08:45:41 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	pipe_handler(t_list *cmd, t_pipe *p)
 		if (!check_builtin(p->cmd[0]))
 			p->pids[p->i++] = execute_cmd(p->cmd, p, 0);
 		else
-			execute_builtin_parent(p->cmd, p);
+			g_cmd.exit_code = execute_builtin_parent(p->cmd, p);
 		if (p->outfd != 1)
 			close(p->outfd);
 		if (p->infd != 0)
@@ -52,7 +52,7 @@ int	execute(t_list *cmd)
 	while (p.j < p.i)
 	{
 		if (p.pids[p.j] == -1)
-			printf("minishell: fork: Resource temporarily unavailable");
+			printf("minishell: fork: Resource temporarily unavailable\n");
 		waitpid(p.pids[p.j++], &p.status, 0);
 		if (WTERMSIG(p.status) == SIGQUIT)
 			write(2, "Quit : 3\n", 9);

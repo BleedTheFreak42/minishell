@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/10 03:31:19 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/10 12:44:30 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,19 @@ void	exec(char **cmd, char **envp)
 {
 	char	*path;
 
+	(void)envp;
 	if (ft_strnchr(cmd[0], '/') > -1)
 		path = cmd[0];
 	else if (*cmd[0])
-		path = getpath(cmd, envp);
+		path = getpath(cmd, g_cmd.env_p);
 	else
 		path = cmd[0];
-	execve(path, cmd, envp);
+	execve(path, cmd, g_cmd.env_p);
 	if (path)
 	{
 		write(STDERR, "minishell: ", 12);
-		write(STDERR, "command not found: ", 19);
+		write(STDERR, strerror(errno), ft_strlen(strerror(errno)));
+		write(STDERR, " ", 1);
 		write(STDERR, path, ft_strnchr(path, '\0'));
 		write(STDERR, "\n", 1);
 	}

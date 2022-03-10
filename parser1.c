@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 14:07:30 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 01:13:08 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 10:38:48 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_checkline(char **line)
 	}
 }
 
-void	ft_printenv(int fd, int flag)
+int	ft_printenv(int fd, int flag)
 {
 	int	i;
 
@@ -36,14 +36,19 @@ void	ft_printenv(int fd, int flag)
 		write(fd, "\n", 1);
 		i++;
 	}
+	return (0);
 }
 
 void	ft_free_env(char ***env_p)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (*env_p[i])
-		free(*env_p[i++]);
-	free(*env_p);
+	while (env_p[0][i])
+	{
+		if (env_p[0][i])
+			free(env_p[0][i]);
+		i++;
+	}
+	free(env_p[0]);
 }

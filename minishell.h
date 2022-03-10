@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 06:05:24 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 10:10:58 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ t_list			*get_listcmd(void);
 char			**add_env(char **envp);
 int				ft_check_syntax(char *str);
 void			ft_printcommads(t_list *commands);
-void			ft_export(char *parm, int fd);
-void			ft_printenv(int fd, int flag);
+int				ft_export(char *parm, int fd);
+int				ft_printenv(int fd, int flag);
 char			*ft_exapnd_if1(int i, char *str);
 int				get_dollar_index(char *str);
 char			*ft_expand_else3(char *s1, char *s2, char *s3);
@@ -110,14 +110,14 @@ void			signal_handler(void);
 int				ft_strcmp(char *s1, char *s2);
 int				ft_def(char c);
 int				syntax_checker(char *str);
-void			ft_unset(char *parm);
+int				ft_unset(char *parm);
 t_list			*ft_expand_tokens(t_list *tokens);
 int				get_nbdollar(char *str);
 int				check_env(char *s);
 int				ft_comp(char *str, char *f);
 void			ft_echo(char **args);
 void			ft_pwd(int fd);
-void			ft_cd(char **path, int fd);
+int				ft_cd(char **path, int fd);
 void			ft_exit(char **cmds, int fd);
 char			*ft_itoa(int n);
 unsigned char	ft_atoi(const char *nptr);
@@ -130,8 +130,9 @@ int				handle_files(t_list *files, int *in, int *out);
 char			**get_cmd_args(t_list *cmd);
 int				check_builtin(char *name);
 int				execute_cmd(char **cmds, t_pipe *p, int echo);
-void			execute_builtin_parent(char **cmds, t_pipe *p);
+int				execute_builtin_parent(char **cmds, t_pipe *p);
 size_t			list_size(t_list *list);
 void			free_chars(char *a, char *b, char **c);
+void			ft_free_env(char ***env_p);
 
 #endif

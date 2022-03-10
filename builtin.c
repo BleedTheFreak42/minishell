@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 21:57:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 05:57:31 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 12:11:30 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	ft_exit(char **cmds, int fd)
 		write(2, "minishell : exit: numeric argument required\n",
 			ft_strlen("minishell : exit: numeric argument required\n"));
 	}
-	xflush();
+	//xflush();
+    system("leaks minishell");
 	exit(r);
 }
 

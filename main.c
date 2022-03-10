@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:01:42 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 08:14:45 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 11:04:25 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,12 @@ void	ft_lunch(void)
 	char	*str;
 	t_list	*tokens;
 	int		ret;
-	char	*tmp;
 
 	tokens = NULL;
 	str = ft_strdup("", 1);
 	while (!*str)
 	{
-		tmp = str;
 		str = readline("minishell : ");
-		free (tmp);
 		add_history(str);
 		ft_checkline(&str);
 		ret = syntax_checker(str);
@@ -45,6 +42,7 @@ void	ft_lunch(void)
 		else
 			p_error();
 	}
+	free(str);
 }
 
 int	ft_check_type(t_list *tokens)
@@ -89,7 +87,10 @@ int	main(int argc, char const *argv[], char **envp)
 	signal_handler();
 	g_cmd.env_p = add_env(envp);
 	while (1)
+	{
 		ft_lunch();
+	}
 	xflush();
+    ft_free_env(&g_cmd.env_p);
 	return (0);
 }

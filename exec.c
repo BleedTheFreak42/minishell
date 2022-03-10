@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 09:47:57 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 06:03:15 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 08:48:44 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-size_t	list_size(t_list *list)
-{
-	t_list	*head;
-	int		i;
-
-	head = list;
-	i = 0;
-	while (head)
-	{
-		i++;
-		head = head->next;
-	}
-	return (i);
-}
 
 int	execute_cmd(char **cmds, t_pipe *p, int echo)
 {
@@ -93,31 +78,38 @@ int	check_builtin(char *name)
 		return (0);
 }
 
-void	execute_builtin_parent(char **cmds, t_pipe *p)
+void	exec_echo(char **cmds, t_pipe *p)
 {
-	int	i;
+	p->pids[p->i++] = execute_cmd(cmds, p, 1);
+	if (p->infd != 0)
+		close(p->infd);
+	if (p->outfd != 1)
+		close(p->outfd);
+}
 
-	i = check_builtin(cmds[0]);
-	if (i == 1)
-	{
-		p->pids[p->i++] = execute_cmd(cmds, p, 1);
-		if (p->infd != 0)
-			close(p->infd);
-		if (p->outfd != 1)
-			close(p->outfd);
-	}
-	else if (i == 2)
-		ft_cd(cmds, p->outfd);
-	else if (i == 3)
+int	execute_builtin_parent(char **cmds, t_pipe *p)
+{
+	int	i[2];
+
+	i[0] = check_builtin(cmds[0]);
+	i[1] = 0;
+	if (i[0] > 1)
+		g_cmd.is_forked = 2;
+	if (i[0] == 1)
+		exec_echo(cmds, p);
+	else if (i[0] == 2)
+		i[1] = ft_cd(cmds, p->outfd);
+	else if (i[0] == 3)
 		ft_pwd(p->outfd);
-	else if (i == 4)
-		ft_printenv(p->outfd, 0);
-	else if (i == 5)
-		ft_export(cmds[1], p->outfd);
-	else if (i == 6)
-		ft_unset(cmds[1]);
-	else if (i == 7)
-	{
+	else if (i[0] == 4)
+		i[1] = ft_printenv(p->outfd, 0);
+	else if (i[0] == 5)
+		i[1] = ft_export(cmds[1], p->outfd);
+	else if (i[0] == 6)
+		i[1] = ft_unset(cmds[1]);
+	else if (i[0] == 7)
 		ft_exit(cmds, p->outfd);
-	}
+	if (i[0] > 1)
+		g_cmd.is_forked = 0;
+	return ((i[1] > 0 || i[1] < 0));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 23:45:55 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 10:28:28 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,11 @@ char	**add_env(char **envp)
 	while (envp[i])
 		i++;
 	g_cmd.env_len = i;
-	ret = (char **) xmalloc(sizeof(char *) * (g_cmd.env_len + 1));
+	ret = (char **) malloc(sizeof(char *) * (g_cmd.env_len + 1));
 	i = 0;
 	while (envp[i])
 	{
-		ret[i] = ft_strdup(envp[i], 1);
+		ret[i] = ft_strdup(envp[i], 0);
 		i++;
 	}
 	ret[i] = NULL;

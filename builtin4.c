@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin4.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 00:44:09 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 05:58:03 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 12:51:51 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,18 @@ int	check_env(char *s)
 		old_var = get_name_value(env[i]);
 		if (ft_comp(old_var[0], var[0])
 			&& ft_strlen(old_var[0]) == ft_strlen(var[0]))
-		{
-			free_chars(old_var[0], old_var[1], old_var);
 			return (1);
-		}
 		i++;
-		free_chars(old_var[0], old_var[1], old_var);
 	}
 	return (0);
 }
 
-void	ft_cd(char **path, int fd)
+int	ft_cd(char **path, int fd)
 {
-	int	result;
+	static int	result;
+	char		*pwd;
 
+	pwd = getcwd(NULL, 0);
 	if (!path[1])
 	{
 		if (!ft_strlen(ft_getenv(g_cmd.env_p, "HOME")))
@@ -57,10 +55,11 @@ void	ft_cd(char **path, int fd)
 		else
 		{
 			ft_export(ft_strjoin("OLDPWD=", ft_getenv(g_cmd.env_p, "PWD")), fd);
-			chdir(ft_getenv(g_cmd.env_p, "HOME"));
-			ft_export(ft_strjoin("PWD=", getcwd(NULL, 0)), fd);
+			result = chdir(ft_getenv(g_cmd.env_p, "HOME"));
+			ft_export(ft_strjoin("PWD=", pwd), fd);
+			free(pwd);
 		}
-		return ;
+		return (result);
 	}
 	result = chdir(path[1]);
 	if (access(path[1], F_OK) == 0 && result == -1)
@@ -70,6 +69,8 @@ void	ft_cd(char **path, int fd)
 	else
 	{
 		ft_export(ft_strjoin("OLDPWD=", ft_getenv(g_cmd.env_p, "PWD")), fd);
-		ft_export(ft_strjoin("PWD=", getcwd(NULL, 0)), fd);
+		ft_export(ft_strjoin("PWD=", pwd), fd);
+		free(pwd);
 	}
+	return (result);
 }

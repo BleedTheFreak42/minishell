@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 23:50:00 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 23:55:07 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 12:20:35 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ char	*ft_getenv(char **envp, char *var)
 				j++;
 			ret = ft_strchr(envp[i], '=');
 			if (!ret)
-				return (ft_strdup("", 0));
+				return (ft_strdup("", 1));
 			else if (j == ft_strlen(var))
 				return (ret + 1);
 		}
 		i++;
 	}
-	return (ft_strdup("", 0));
+	return (ft_strdup("", 1));
 }

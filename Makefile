@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+         #
+#    By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/21 09:05:54 by ytaya             #+#    #+#              #
-#    Updated: 2022/03/10 08:36:24 by ytaya            ###   ########.fr        #
+#    Updated: 2022/03/10 11:39:46 by ael-ghem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 name = minishell
-usr = ytaya
+usr = ael-ghem
 SRC =  libft.c\
 xmalloc.c\
 xexit.c list.c\
@@ -40,15 +40,14 @@ exec1.c\
 exec_tools.c\
 ft_atoi.c\
 ft_itoa.c\
-exec_tools_helper.c\
 ft_handle_file.c\
 exec_tools1.c
 
-# FLAGS =  -lreadline -L /Users/$(usr)/.brew/opt/readline/lib -I /Users/$(usr)/.brew/opt/readline/include
-FLAGS = -lreadline -L /opt/homebrew/opt/readline/lib -I /opt/homebrew/opt/readline/include
+FLAGS =  -lreadline -L /Users/$(usr)/goinfre/.brew/opt/readline/lib -I /Users/$(usr)/goinfre/.brew/opt/readline/include
 
 all:
-	gcc $(SRC) main.c -Wall -Werror -Wextra  $(FLAGS) -o $(name) -fsanitize=address -g3
+	gcc $(SRC) main.c -Wall -Werror -Wextra  $(FLAGS) -o $(name)  -g3
+#-fsanitize=address -g3
 # gcc $(SRC) main.c -Wall -Werror -Wextra  $(FLAGS) -o $(name) -fsanitize=address -g3
 
 

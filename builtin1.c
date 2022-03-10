@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 00:41:28 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 05:57:40 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 12:37:23 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,11 @@ char	**get_name_value(char *s)
 		i = ft_getname(s);
 		if (s[i] == '\0')
 			return (NULL);
-		name = malloc(sizeof(char) * (i + 1));
+		name = xmalloc(sizeof(char) * (i + 1));
 		i = ft_cpyto(s, &name);
-		value = malloc(sizeof(char) * (ft_strlen(&s[++i]) + 1));
+		value = xmalloc(sizeof(char) * (ft_strlen(&s[++i]) + 1));
 		ft_strcpy(value, &s[i]);
-		ret = malloc(sizeof(char *) * 2);
+		ret = xmalloc(sizeof(char *) * 2);
 		ret[0] = name;
 		ret[1] = value;
 	}

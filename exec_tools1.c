@@ -6,7 +6,7 @@
 /*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 03:31:33 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/10 03:31:53 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/10 12:34:18 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,19 @@ char	**ft_split(char *s, char sep)
 		s = s + j + 1;
 	}
 	return (ret);
+}
+
+size_t	list_size(t_list *list)
+{
+	t_list	*head;
+	int		i;
+
+	head = list;
+	i = 0;
+	while (head)
+	{
+		i++;
+		head = head->next;
+	}
+	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 21:57:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 01:18:09 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 23:35:23 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,25 @@
 
 void	ft_exit(char **cmds, int fd)
 {
-	int r;
-	int i;
+	int	r;
+	int	i;
 
 	r = 0;
 	i = 0;
-	while(cmds[i])
+	while (cmds[i])
 		i++;
 	write(fd, "exit\n", 5);
 	if (i > 1 && ft_atoi(cmds[1]) != 255)
 	{
-		write(2, "minishell : exit: too many arguments\n", ft_strlen("minishell : exit: too many arguments\n"));
+		write(2, "minishell : exit: too many arguments\n",
+			ft_strlen("minishell : exit: too many arguments\n"));
 		r = 1;
 	}
 	else if (i > 1 && ft_atoi(cmds[1]) == 255)
 	{
 		r = 255;
-		write(2,"minishell : exit: numeric argument required\n", ft_strlen("minishell : exit: numeric argument required\n"));
+		write(2, "minishell : exit: numeric argument required\n",
+			ft_strlen("minishell : exit: numeric argument required\n"));
 	}
 	xflush();
 	exit(r);

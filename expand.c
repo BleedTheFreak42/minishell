@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 14:10:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/07 07:55:21 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 23:38:41 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,15 @@ char	*ft_expand(char *str)
 	return (NULL);
 }
 
-t_list *ft_expand_tokens(t_list *tokens)
+t_list	*ft_expand_tokens(t_list *tokens)
 {
-	t_list *head;
+	t_list	*head;
 
 	head = tokens;
-	// tokens = g_cmd.tokens;
-
 	while (tokens)
 	{
 		if (((t_token *)tokens->content)->e_type == 5)
-			printf("%d\n",get_nbdollar(((t_token *)tokens->content)->value));
+			printf("%d\n", get_nbdollar(((t_token *)tokens->content)->value));
 		tokens = tokens->next;
 	}
 	return (head);

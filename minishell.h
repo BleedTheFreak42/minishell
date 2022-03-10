@@ -6,10 +6,9 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 06:46:59 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 00:54:22 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -54,11 +53,10 @@ typedef struct s_minihsell
 	t_list	*commands;
 	t_list	*tokens;
 	t_qoute	q;
-	int 	is_forked;
-	int 	exit_code;
-    int     in_herdoc;
+	int		is_forked;
+	int		exit_code;
+	int		in_herdoc;
 }t_minishell;
-
 
 typedef struct s_command
 {
@@ -120,12 +118,12 @@ int				ft_comp(char *str, char *f);
 void			ft_echo(char **args);
 void			ft_pwd(int fd);
 void			ft_cd(char **path, int fd);
-void	ft_exit(char **cmds, int fd);
+void			ft_exit(char **cmds, int fd);
 char			*ft_itoa(int n);
 unsigned char	ft_atoi(const char *nptr);
 int				ft_isalnum0(int c);
 void			quit_handler(int sig);
 void			setup_term(void);
-
+int				check_export_input(char *s);
+char			**get_name_value(char *s);
 #endif
-

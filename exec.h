@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 03:16:09 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/08 20:27:07 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/09 23:38:17 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,32 +33,31 @@ typedef struct s_files
 		TYPE_HEREDOC = 3,
 		TYPE_APPEND = 4
 	}e_ftype;
-	char *value;
+	char	*value;
 }t_files;
 
 typedef struct s_pipe
 {
-    int     i;
-    int     j;
+	int		i;
+	int		j;
 	int		infd;
 	int		outfd;
-    int     fds[2];
+	int		fds[2];
 	int		status;
-    pid_t   *pids;
+	pid_t	*pids;
 	char	**cmd;
-    t_list *files;
-	char    **arg_head;
-    
+	t_list	*files;
+	char	**arg_head;
 }	t_pipe;
 
-int		ft_strnchr (char *str, char c);
-char	*ft_strndup (char *str, unsigned int n);
-char	*join_path (char *path, char *bin);
-int		ft_strncmp (char *str1, char *str2, int n);
-int     here_doc(char *path, char *esc);
-void	exec (char **cmd, char **envp);
-int     ft_strncmp (char *s1, char *s2, int n);
-char	*getpath (char **cmd, char **envp);
-char	*join_path (char *path, char *bin);
+int		ft_strnchr(char *str, char c);
+char	*ft_strndup(char *str, unsigned int n);
+char	*join_path(char *path, char *bin);
+int		ft_strncmp(char *str1, char *str2, int n);
+int		here_doc(char *path, char *esc);
+void	exec(char **cmd, char **envp);
+int		ft_strncmp(char *s1, char *s2, int n);
+char	*getpath(char **cmd, char **envp);
+char	*join_path(char *path, char *bin);
 int		execute(t_list *cmd);
 #endif

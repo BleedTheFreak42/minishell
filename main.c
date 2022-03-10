@@ -6,10 +6,9 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:01:42 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 22:13:27 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 23:45:37 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -17,7 +16,6 @@ void	p_error(void)
 {
 	printf("minishell : syntax error near unexpected token\n");
 	g_cmd.exit_code = 258;
-	// xflush();
 }
 
 void	ft_lunch(void)
@@ -40,16 +38,14 @@ void	ft_lunch(void)
 		{
 			if (g_cmd.commands)
 				if (execute(g_cmd.commands) == -1)
-				{
-					// printf("Error");
-				}
+					;
 		}
 		else
 			p_error();
 	}
 }
 
-int ft_check_type(t_list *tokens)
+int	ft_check_type(t_list *tokens)
 {
 	while (tokens)
 	{
@@ -61,9 +57,9 @@ int ft_check_type(t_list *tokens)
 	return (0);
 }
 
-int syntax_checker(char *str)
+int	syntax_checker(char *str)
 {
-	t_list *tokens;
+	t_list	*tokens;
 
 	tokens = NULL;
 	if (ft_check_syntax(str))
@@ -82,10 +78,10 @@ int syntax_checker(char *str)
 
 int	main(int argc, char const *argv[], char **envp)
 {
+	t_list	*tokens;
+
 	(void) argc;
 	(void) argv;
-	t_list *tokens;
-
 	tokens = NULL;
 	setup_term();
 	signal_handler();
@@ -94,5 +90,4 @@ int	main(int argc, char const *argv[], char **envp)
 		ft_lunch();
 	xflush();
 	return (0);
-
 }

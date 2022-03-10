@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/09 06:43:23 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 23:35:53 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ int	here_doc(char *path, char *esc)
 			break ;
 		buf[r] = '\0';
 		if (((ft_strncmp(buf, esc, ft_strnchr(esc, '\0')) == 0)
-			&& (ft_strnchr(esc, '\0') == ft_strnchr(buf, '\0') - 1)) || !g_cmd.in_herdoc)
+				&& (ft_strnchr(esc, '\0') == ft_strnchr(buf, '\0') - 1))
+			|| !g_cmd.in_herdoc)
 			break ;
 		if (ft_strnchr(buf, '\n') != -1 && *buf)
 			write(infd, buf, ft_strnchr(buf, '\n') + 1);

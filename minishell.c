@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:05:52 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/06 04:31:52 by ael-ghem         ###   ########.fr       */
+/*   Updated: 2022/03/09 23:45:55 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,32 +91,4 @@ char	**add_env(char **envp)
 	}
 	ret[i] = NULL;
 	return (ret);
-} 
-
-void	ft_printcommads(t_list *commands)
-{
-	// t_list	*commands;
-	t_list	*args;
-	t_list	*files;
-
-	args = NULL;
-	files = NULL;
-	// commands = get_listcmd();
-	while (commands)
-	{
-		args = ((t_command *)commands->content)->args;
-		while (args)
-		{
-			printf("Words = %s\n", (char *)args->content);
-			args = args->next;
-		}
-		files = ((t_command *)commands->content)->file;
-		while (files)
-		{
-			// printf("type = %d\n", ((t_files *)files->content)->e_ftype);
-			// printf("filename = %s\n", ((t_files *)files->content)->value);
-			files = files->next;
-		}
-		commands = commands->next;
-	}
 }

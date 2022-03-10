@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 14:05:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/06 02:49:03 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 00:13:21 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ t_list	*ft_inittokens(char *str)
 		head = ft_lstnew(token);
 	while (token)
 	{
-		// printf("TOKEN(%d,%s)\n", token->e_type, token->value);
 		token = lexer_next_token(lexer);
 		if (token)
 			ft_lstadd_back(&head, ft_lstnew(token));
@@ -74,7 +73,7 @@ int	ft_check_tokens(t_list *tokens)
 	t_list	*tmp;
 	t_token	*current;
 	t_token	*next;
-	int i;
+	int		i;
 
 	i = 0;
 	if (!tokens)
@@ -83,7 +82,7 @@ int	ft_check_tokens(t_list *tokens)
 	while (tmp)
 	{
 		current = (t_token *)tmp->content;
-		if (current->e_type == 0 && !i)
+		if (current->e_type == 0 && !i && (i++ || 1))
 			return (1);
 		next = NULL;
 		if (tmp->next)
@@ -91,14 +90,9 @@ int	ft_check_tokens(t_list *tokens)
 		else if (current->e_type >= 0 && current->e_type <= 4)
 			return (1);
 		if (current && next && current->e_type >= 0 && current->e_type <= 4)
-		{
-			if (current->e_type == next->e_type)
+			if ((current->e_type == next->e_type) || (next->e_type == 0))
 				return (1);
-			if (next->e_type == 0)
-				return (1);
-		}
 		tmp = tmp->next;
-		i++;
 	}
 	return (0);
 }

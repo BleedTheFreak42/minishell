@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 09:47:57 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 22:34:45 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/09 23:36:26 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,22 +198,11 @@ int	pipe_handler(t_list *cmd, t_pipe *p)
 	return (0);
 }
 
-// void	test(int sig)
-// {
-// 	(void)sig;
-// 	if (g_cmd.is_forked == 1)
-// 	{
-// 		g_cmd.exit_code = 131;
-// 		g_cmd.is_forked = 2;
-// 	}
-// }
-
 int	execute(t_list *cmd)
 {
 	t_pipe	p;
 
 	g_cmd.is_forked = 1;
-	// signal(SIGQUIT, quit_handler);
 	bzero(&p, sizeof(t_pipe));
 	p.pids = (pid_t *)xmalloc(sizeof(pid_t) * list_size(cmd) + 1);
 	if (pipe_handler(cmd, &p) == -1)
@@ -223,8 +212,8 @@ int	execute(t_list *cmd)
 		if (p.pids[p.j] == -1)
 			printf("minishell: fork: Resource temporarily unavailable");
 		waitpid(p.pids[p.j++], &p.status, 0);
-			if (WTERMSIG(p.status) == SIGQUIT)
-				write(2, "Quit : 3\n", 9);
+		if (WTERMSIG(p.status) == SIGQUIT)
+			write(2, "Quit : 3\n", 9);
 	}
 	if (g_cmd.is_forked == 1)
 		g_cmd.exit_code = WEXITSTATUS(p.status);

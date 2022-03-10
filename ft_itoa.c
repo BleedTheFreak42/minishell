@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 23:55:59 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 23:56:28 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 02:30:44 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*ft_itoa(int n)
 		len = ft_numberlen(n);
 		nbr = (unsigned int) n;
 	}
-	number = (char *) malloc(sizeof(char) * len + 1);
+	number = (char *) xmalloc(sizeof(char) * len + 1);
 	if (number)
 		ft_fill(len, nbr, number, sign);
 	return (number);

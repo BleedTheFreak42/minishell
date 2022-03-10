@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 10:00:56 by ytaya             #+#    #+#             */
-/*   Updated: 2022/02/26 10:00:57 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 02:31:07 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_list	*ft_lstnew(void *content)
 {
 	t_list	*newlst;
 
-	newlst = (t_list *) malloc(sizeof(t_list));
+	newlst = (t_list *) xmalloc(sizeof(t_list));
 	if (!newlst)
 		return (0);
 	newlst->next = 0;

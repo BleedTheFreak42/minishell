@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/09 23:35:53 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 03:31:19 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,13 @@ void	exec(char **cmd, char **envp)
 	exit(127);
 }
 
-int	here_doc(char *path, char *esc)
+void	read_input(int infd, char *esc)
 {
-	int		infd;
-	char	*buf;
 	int		r;
+	char	*buf;
 
 	r = 42;
 	buf = malloc(1025);
-	infd = open(path, O_CREAT | O_WRONLY | O_TRUNC,
-			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
-	if (infd < 0)
-		return (-1);
 	g_cmd.in_herdoc = 1;
 	while (r && g_cmd.in_herdoc)
 	{
@@ -87,9 +82,20 @@ int	here_doc(char *path, char *esc)
 		if (ft_strnchr(buf, '\n') != -1 && *buf)
 			write(infd, buf, ft_strnchr(buf, '\n') + 1);
 	}
-	close(infd);
 	g_cmd.in_herdoc = 0;
 	free(buf);
+}
+
+int	here_doc(char *path, char *esc)
+{
+	int		infd;
+
+	infd = open(path, O_CREAT | O_WRONLY | O_TRUNC,
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+	if (infd < 0)
+		return (-1);
+	read_input(infd, esc);
+	close(infd);
 	return (open(path, O_RDONLY));
 }
 
@@ -106,75 +112,4 @@ int	ft_strnchr(char *str, char c)
 			return (i);
 	}
 	return (-1);
-}
-
-char	*ft_strndup(char *s, unsigned int n)
-{
-	char				*ret;
-	unsigned int		i;
-
-	i = 0;
-	ret = malloc(sizeof(char) * (n + 1));
-	while (i < n)
-		ret[i++] = *s++;
-	ret[n] = 0;
-	return (ret);
-}
-
-char	*join_path(char *path, char *bin)
-{
-	char	*ret;
-	int		i;
-	int		j;
-
-	ret = malloc(sizeof(char)
-			*(ft_strnchr(path, 0) + ft_strnchr(bin, 0) + 2));
-	if (!ret)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (path[j])
-		ret[i++] = path[j++];
-	ret[i++] = '/';
-	j = 0;
-	while (bin[j])
-		ret[i++] = bin[j++];
-	ret[i] = 0;
-	return (ret);
-}
-
-int	ft_strncmp(char *s1, char *s2, int n)
-{
-	while (--n > 0 && *s1 && *s2 && *s1 == *s2)
-	{
-		s1++;
-		s2++;
-	}
-	return (*s2 - *s1);
-}
-
-char	**ft_split(char *s, char sep)
-{
-	char	**ret;
-	int		words;
-	int		i;
-	int		j;
-
-	words = 0;
-	j = 0;
-	while (s[j])
-		if (s[j++] == sep)
-			words++;
-	ret = malloc(sizeof(char *) * (words + 2));
-	ret[words + 1] = NULL;
-	i = 0;
-	while (i < words + 1)
-	{
-		j = 0;
-		while (s[j] && s[j] != sep)
-			j++;
-		ret[i++] = ft_strndup(s, j);
-		s = s + j + 1;
-	}
-	return (ret);
 }

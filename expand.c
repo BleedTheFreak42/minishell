@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 14:10:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 23:38:41 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 03:32:54 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 char	*ft_expand(char *str)
 {
 	int		i;
-	int		j;
 	char	*result[3];
 
 	i = get_dollar_index(str);
@@ -27,15 +26,9 @@ char	*ft_expand(char *str)
 		else if (str[i] == '\0')
 			result[1] = ft_strdup("$", 1);
 		else if (ft_isdigit(str[i]))
-		{
-			j = i + 1;
-			result[1] = ft_expand_else1(&i, str, j);
-		}
+			result[1] = ft_expand_else1(&i, str, i + 1);
 		else
-		{
-			j = i;
-			result[1] = ft_expand_else2(&i, str, j);
-		}
+			result[1] = ft_expand_else2(&i, str, i);
 		result[2] = ft_strdup(&str[i], 1);
 	}
 	if (result[0] && result[1] && result[2])

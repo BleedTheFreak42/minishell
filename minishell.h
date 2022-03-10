@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 00:54:22 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 06:05:24 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,4 +126,12 @@ void			quit_handler(int sig);
 void			setup_term(void);
 int				check_export_input(char *s);
 char			**get_name_value(char *s);
+int				handle_files(t_list *files, int *in, int *out);
+char			**get_cmd_args(t_list *cmd);
+int				check_builtin(char *name);
+int				execute_cmd(char **cmds, t_pipe *p, int echo);
+void			execute_builtin_parent(char **cmds, t_pipe *p);
+size_t			list_size(t_list *list);
+void			free_chars(char *a, char *b, char **c);
+
 #endif

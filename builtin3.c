@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 00:43:11 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 00:43:32 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 05:57:54 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,11 @@ void	ft_unset(char *name)
 		if (ft_comp(old_var[0], name)
 			&& ft_strlen(old_var[0]) == ft_strlen(name))
 				i++;
-		free(old_var[0]);
-		free(old_var[1]);
-		free(old_var);
+		free_chars(old_var[0], old_var[1], old_var);
 		if (env[i] == NULL)
 			break ;
 		else
-			new_env[j] = ft_strdup(env[i], 1);
-		i++;
-		j++;
+			new_env[j++] = ft_strdup(env[i++], 1);
 	}
 	new_env[j] = NULL;
 	g_cmd.env_p = new_env;

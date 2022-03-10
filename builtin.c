@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 21:57:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/09 23:35:23 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/10 05:57:31 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,38 +38,34 @@ void	ft_exit(char **cmds, int fd)
 	exit(r);
 }
 
-void	ft_echo(char **args)
+int	ft_echoif1(char c, int *flag3)
 {
-	int	flag[3];
-	int	i;
-	int	j;
+	if (c != 'n')
+	{
+		*flag3 = 1;
+		return (1);
+	}
+	else
+		return (0);
+}
 
-	flag[1] = 1;
-	flag[2] = 0;
-	i = 1;
-	while (args[i])
+void	iko(char **args, int i, int j, int *flag)
+{
+	while (args[++i])
 	{
 		flag[0] = 1;
-		if (ft_comp(args[i], "-n") && flag[2] == 0)
+		if (ft_comp(args[i], "-n") && !flag[2] && !flag[3])
 		{
 			flag[0] = 0;
-			flag[1] = 0;
+			flag[1] = 1;
 			j = 1;
 			while (args[i][j])
-			{
-				if (args[i][j] != 'n')
-				{
-					flag[0] = 1;
-					flag[1] = 1;
+				if (ft_echoif1(args[i][j++], &flag[3]))
 					break ;
-				}
-				j++;
-			}
-			if (!args[i][j])
-			{
-				flag[0] = 0;
+			if (flag[3])
+				flag[0] = 1;
+			if (!flag[1] && !flag[3])
 				flag[1] = 0;
-			}
 		}
 		if (flag[0] || flag[2])
 		{
@@ -78,9 +74,20 @@ void	ft_echo(char **args)
 			write(1, args[i], ft_strlen(args[i]));
 			flag[2] = 1;
 		}
-		i++;
 	}
-	if (flag[1])
+}
+
+void	ft_echo(char **args)
+{
+	int	flag[4];
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	bzero(&flag, sizeof(int) * 4);
+	iko(args, i, j, flag);
+	if (flag[1] == 0)
 		write(1, "\n", 1);
 	exit(0);
 }
@@ -98,32 +105,4 @@ void	ft_pwd(int fd)
 	else
 		perror("error\n");
 	free(pwd);
-}
-
-void	ft_cd(char **path, int fd)
-{
-	int	result;
-
-	if (!path[1])
-	{
-		if (!ft_strlen(ft_getenv(g_cmd.env_p, "HOME")))
-			printf("minishell : cd: HOME not set\n");
-		else
-		{
-			ft_export(ft_strjoin("OLDPWD=", ft_getenv(g_cmd.env_p, "PWD")), fd);
-			chdir(ft_getenv(g_cmd.env_p, "HOME"));
-			ft_export(ft_strjoin("PWD=", getcwd(NULL, 0)), fd);
-		}
-		return ;
-	}
-	result = chdir(path[1]);
-	if (access(path[1], F_OK) == 0 && result == -1)
-		printf("minishell : cd: %s: Not a directory\n", path[1]);
-	else if (result == -1)
-		printf("minishell : cd: %s: No such file or directory\n", path[1]);
-	else
-	{
-		ft_export(ft_strjoin("OLDPWD=", ft_getenv(g_cmd.env_p, "PWD")), fd);
-		ft_export(ft_strjoin("PWD=", getcwd(NULL, 0)), fd);
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:23 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 09:36:01 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	exec(char **cmd, char **envp)
 	exit(127);
 }
 
-void	read_input(int infd, char *esc)
+static void	read_input(int infd, char *esc)
 {
 	int		r;
 	char	*buf;

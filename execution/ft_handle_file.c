@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 04:18:30 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:23 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 09:04:05 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	handle_file_if1(t_files *file)
 	write(STDERR, "minishell : ", 12);
 	write(STDERR, file->value, ft_strnchr(file->value, 0));
 	write(STDERR, ": No such file or directory\n", 28);
+	g_cmd.is_forked = 2;
+	g_cmd.exit_code = 1;
 	return (-1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 09:47:57 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:23 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 08:50:40 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,15 @@ int	execute_builtin_parent(char **cmds, t_pipe *p)
 	else if (i[0] == 2)
 		i[1] = ft_cd(cmds, p->outfd);
 	else if (i[0] == 3)
-		ft_pwd(p->outfd);
+		i[1] = ft_pwd(p->outfd);
 	else if (i[0] == 4)
 		i[1] = ft_printenv(p->outfd, 0);
 	else if (i[0] == 5)
-		i[1] = ft_export(cmds[1], p->outfd);
+		i[1] = ft_export(cmds, p->outfd);
 	else if (i[0] == 6)
-		i[1] = ft_unset(cmds[1]);
+		i[1] = ft_unset(cmds);
 	else if (i[0] == 7)
-		ft_exit(cmds, p->outfd);
+		i[1] = ft_exit(cmds, p->outfd);
 	if (i[0] > 1)
 		g_cmd.is_forked = 0;
 	return ((i[1] > 0 || i[1] < 0));

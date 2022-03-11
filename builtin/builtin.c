@@ -6,65 +6,90 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 21:57:07 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:23 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 09:33:49 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_exit(char **cmds, int fd)
+static int	check_arg(char *s)
 {
-	int	r;
 	int	i;
 
-	r = 0;
 	i = 0;
-	while (cmds[i])
+	while (s[i])
+	{
+		if (s[i] != '-' && s[i] != '+' && !(s[i] <= '9' && s[i] >= '0'))
+			return (1);
 		i++;
-	write(fd, "exit\n", 5);
-	if (i > 1 && ft_atoi(cmds[1]) != 255)
-	{
-		write(2, "minishell : exit: too many arguments\n",
-			ft_strlen("minishell : exit: too many arguments\n"));
-		r = 1;
 	}
-	else if (i > 1 && ft_atoi(cmds[1]) == 255)
-	{
-		r = 255;
-		write(2, "minishell : exit: numeric argument required\n",
-			ft_strlen("minishell : exit: numeric argument required\n"));
-	}
-	exit(r);
+	return (0);
 }
 
-int	ft_echoif1(char c, int *flag3)
+int	ft_exit(char **cmds, int fd)
 {
-	if (c != 'n')
+	int	i;
+
+	i = 0;
+	(void)fd;
+	while (cmds[i])
 	{
-		*flag3 = 1;
+		i++;
+		if (cmds[i] && check_arg(cmds[i]))
+		{
+			write(2, "exit\n", 6);
+			write(2, "minishell : exit: numeric argument required\n", 45);
+			xflush();
+			exit(255);
+		}
+	}
+	if (i > 2)
+	{
+		write(2, "exit\n", 6);
+		write(2, "minishell : exit: too many arguments\n", 38);
 		return (1);
 	}
-	else
-		return (0);
+	write(2, "exit\n", 6);
+	exit((unsigned char) ft_atoi(cmds[1]));
 }
 
-void	iko(char **args, int i, int j, int *flag)
+static int	check_flag(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] != 'n')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+static void	ft_set(int *a, int *b, int *c)
+{
+	*a = 1;
+	*b = 0;
+	*c = 1;
+}
+
+void	iko(char **args, int i, int *flag)
 {
 	while (args[++i])
 	{
 		flag[0] = 1;
-		if (ft_comp(args[i], "-n") && !flag[2] && !flag[3])
+		if (ft_comp(args[i], "-n") && !flag[3] && !flag[2])
 		{
-			flag[0] = 0;
-			flag[1] = 1;
-			j = 1;
-			while (args[i][j])
-				if (ft_echoif1(args[i][j++], &flag[3]))
-					break ;
+			flag[3] = check_flag((args[i]) + 2);
 			if (flag[3])
+			{
+				if (!flag[4])
+					flag[1] = 0;
 				flag[0] = 1;
-			if (!flag[1] && !flag[3])
-				flag[1] = 0;
+			}
+			else
+				ft_set(&flag[1], &flag[0], &flag[4]);
 		}
 		if (flag[0] || flag[2])
 		{
@@ -74,34 +99,4 @@ void	iko(char **args, int i, int j, int *flag)
 			flag[2] = 1;
 		}
 	}
-}
-
-void	ft_echo(char **args)
-{
-	int	flag[4];
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	bzero(&flag, sizeof(int) * 4);
-	iko(args, i, j, flag);
-	if (flag[1] == 0)
-		write(1, "\n", 1);
-	exit(0);
-}
-
-void	ft_pwd(int fd)
-{
-	char	*pwd;
-
-	pwd = getcwd(NULL, 0);
-	if (pwd != NULL)
-	{
-		write(fd, pwd, ft_strlen(pwd));
-		write(fd, "\n", 1);
-	}
-	else
-		perror("error\n");
-	free(pwd);
 }

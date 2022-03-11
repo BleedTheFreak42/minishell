@@ -6,13 +6,13 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 00:41:28 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:24 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 09:34:07 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_getname(char *s)
+static int	ft_getname(char *s)
 {
 	int	i;
 
@@ -25,7 +25,7 @@ int	ft_getname(char *s)
 	return (i);
 }
 
-int	ft_cpyto(char *s, char **name)
+static int	ft_cpyto(char *s, char **name)
 {
 	int	i;
 

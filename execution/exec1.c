@@ -6,11 +6,17 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 06:00:28 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:23 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 09:27:45 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	safe_close(int fd, int safe_fd)
+{
+	if (fd != safe_fd)
+		close(fd);
+}
 
 int	pipe_handler(t_list *cmd, t_pipe *p)
 {
@@ -25,16 +31,16 @@ int	pipe_handler(t_list *cmd, t_pipe *p)
 			p->fds[0] = 0;
 			p->outfd = 1;
 		}
-		handle_files(p->files, &p->infd, &p->outfd);
-		if (!check_builtin(p->cmd[0]))
-			p->pids[p->i++] = execute_cmd(p->cmd, p, 0);
-		else
-			g_cmd.exit_code = execute_builtin_parent(p->cmd, p);
-		if (p->outfd != 1)
-			close(p->outfd);
-		if (p->infd != 0)
-			close(p->infd);
-		p->infd = p->fds[0];
+		if (handle_files(p->files, &p->infd, &p->outfd) != -1)
+		{
+			if (!check_builtin(p->cmd[0]))
+				p->pids[p->i++] = execute_cmd(p->cmd, p, 0);
+			else
+				g_cmd.exit_code = execute_builtin_parent(p->cmd, p);
+			safe_close(p->outfd, 1);
+			safe_close(p->infd, 0);
+			p->infd = p->fds[0];
+		}
 		cmd = cmd->next;
 	}
 	return (0);

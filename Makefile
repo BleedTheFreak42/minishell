@@ -6,7 +6,7 @@
 #    By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/21 09:05:54 by ytaya             #+#    #+#              #
-#    Updated: 2022/03/10 14:06:04 by ytaya            ###   ########.fr        #
+#    Updated: 2022/03/11 09:11:30 by ytaya            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ builtin/builtin1.c\
 builtin/builtin2.c\
 builtin/builtin3.c\
 builtin/builtin4.c\
+builtin/builtin5.c\
 execution/exec.c\
 execution/exec1.c\
 execution/exec_tools.c\

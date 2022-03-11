@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 13:50:11 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 09:45:24 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_minihsell
 	t_list	*commands;
 	t_list	*tokens;
 	t_qoute	q;
+	char	*saved_pwd;
 	int		is_forked;
 	int		exit_code;
 	int		in_herdoc;
@@ -71,7 +72,6 @@ char			*ft_strcat(char *destination, const char *source);
 unsigned int	ft_strlen(const char *str);
 int				ft_isalnum(int c);
 void			*ft_realloc(void *ptr, size_t size);
-void			*ft_memcpy(void *dst, const void *src, size_t n);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strdup(const char *s1, int f);
 void			ft_strcpy(char *dst, const char *src);
@@ -99,7 +99,8 @@ t_list			*get_listcmd(void);
 char			**add_env(char **envp);
 int				ft_check_syntax(char *str);
 void			ft_printcommads(t_list *commands);
-int				ft_export(char *parm, int fd);
+int				ft_export(char **names, int fd);
+int				ft_export_one(char *param, int fd);
 int				ft_printenv(int fd, int flag);
 char			*ft_exapnd_if1(int i, char *str);
 int				get_dollar_index(char *str);
@@ -109,20 +110,19 @@ char			*ft_expand_else1(int *i, char *str, int j);
 void			signal_handler(void);
 int				ft_strcmp(char *s1, char *s2);
 int				ft_def(char c);
-int				syntax_checker(char *str);
-int				ft_unset(char *parm);
+int				ft_unset_one(char *parm);
+int				ft_unset(char **parm);
 t_list			*ft_expand_tokens(t_list *tokens);
 int				get_nbdollar(char *str);
 int				check_env(char *s);
 int				ft_comp(char *str, char *f);
 void			ft_echo(char **args);
-void			ft_pwd(int fd);
+int				ft_pwd(int fd);
 int				ft_cd(char **path, int fd);
-void			ft_exit(char **cmds, int fd);
+int				ft_exit(char **cmds, int fd);
 char			*ft_itoa(int n);
 unsigned char	ft_atoi(const char *nptr);
 int				ft_isalnum0(int c);
-void			quit_handler(int sig);
 void			setup_term(void);
 int				check_export_input(char *s);
 char			**get_name_value(char *s);
@@ -134,5 +134,8 @@ int				execute_builtin_parent(char **cmds, t_pipe *p);
 size_t			list_size(t_list *list);
 void			free_chars(char *a, char *b, char **c);
 void			ft_free_env(char ***env_p);
+int				ft_export_check_params(char *param, int fd);
+void			ft_export_helper(char *param);
+void			iko(char **args, int i, int *flag);
 
 #endif

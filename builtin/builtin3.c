@@ -6,13 +6,26 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 00:43:11 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:24 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 05:18:18 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_unset(char *name)
+int	ft_unset(char **names)
+{
+	int	i;
+
+	i = 0;
+	while (names && names[i])
+	{
+		ft_unset_one(names[i]);
+		i++;
+	}
+	return (0);
+}
+
+int	ft_unset_one(char *name)
 {
 	char	**new_env;
 	char	**old_var;

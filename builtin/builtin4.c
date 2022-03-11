@@ -6,18 +6,11 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 00:44:09 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:24 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 09:34:43 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	free_chars(char *a, char *b, char **c)
-{
-	free(a);
-	free(b);
-	free(c);
-}
 
 int	check_env(char *s)
 {
@@ -42,41 +35,44 @@ int	check_env(char *s)
 	return (0);
 }
 
-int	ft_home_unset(char *pwd, int fd)
+static int	ft_home_unset(char *pwd, int fd)
 {
-	int	result;
+	int		result;
+	char	new[1025];
 
-	ft_export(ft_strjoin("OLDPWD=", ft_getenv(g_cmd.env_p, "PWD")), fd);
 	result = chdir(ft_getenv(g_cmd.env_p, "HOME"));
-	ft_export(ft_strjoin("PWD=", pwd), fd);
-	free(pwd);
+	ft_export_one(ft_strjoin("OLDPWD=", ft_getenv(g_cmd.env_p, "PWD")), fd);
+	if (!result)
+		pwd = getcwd(new, 1024);
+	ft_export_one(ft_strjoin("PWD=", new), fd);
 	return (result);
 }
 
 int	ft_cd(char **path, int fd)
 {
 	static int	result;
-	char		*pwd;
+	char		pwd[1025];
 
-	pwd = getcwd(NULL, 0);
 	if (!path[1])
 	{
 		if (!ft_strlen(ft_getenv(g_cmd.env_p, "HOME")))
 			printf("minishell : cd: HOME not set\n");
 		else
-			result = ft_home_unset(pwd, fd);
+			result = ft_home_unset(getcwd(pwd, 1024), fd);
 		return (result);
 	}
 	result = chdir(path[1]);
+	if (!result)
+	{
+		getcwd(pwd, 1024);
+		ft_export_one(ft_strjoin("OLDPWD=", ft_getenv(g_cmd.env_p,
+					"PWD")), fd);
+	}
 	if (access(path[1], F_OK) == 0 && result == -1)
 		printf("minishell : cd: %s: Not a directory\n", path[1]);
 	else if (result == -1)
 		printf("minishell : cd: %s: No such file or directory\n", path[1]);
-	else
-	{
-		ft_export(ft_strjoin("OLDPWD=", ft_getenv(g_cmd.env_p, "PWD")), fd);
-		ft_export(ft_strjoin("PWD=", pwd), fd);
-		free(pwd);
-	}
+	else if (ft_getenv(g_cmd.env_p, "PWD"))
+		ft_export_one(ft_strjoin("PWD=", pwd), fd);
 	return (result);
 }

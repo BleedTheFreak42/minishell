@@ -6,19 +6,50 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 09:01:42 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:47 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 09:45:05 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
-void	p_error(void)
+static void	p_error(void)
 {
 	printf("minishell : syntax error near unexpected token\n");
 	g_cmd.exit_code = 258;
 }
 
-void	ft_lunch(void)
+static int	ft_check_type(t_list *tokens)
+{
+	while (tokens)
+	{
+		if (((t_token *)tokens->content)->e_type != 6)
+			tokens = tokens->next;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+static int	syntax_checker(char *str)
+{
+	t_list	*tokens;
+
+	tokens = NULL;
+	if (ft_check_syntax(str))
+		return (1);
+	tokens = ft_inittokens(str);
+	if (!tokens)
+		return (2);
+	if (ft_check_type(tokens))
+		return (3);
+	if (ft_check_tokens(tokens))
+		return (4);
+	g_cmd.tokens = tokens;
+	g_cmd.commands = get_listcmd();
+	return (0);
+}
+
+static void	ft_lunch(void)
 {
 	char	*str;
 	t_list	*tokens;
@@ -43,37 +74,6 @@ void	ft_lunch(void)
 			p_error();
 	}
 	free(str);
-}
-
-int	ft_check_type(t_list *tokens)
-{
-	while (tokens)
-	{
-		if (((t_token *)tokens->content)->e_type != 6)
-			tokens = tokens->next;
-		else
-			return (1);
-	}
-	return (0);
-}
-
-int	syntax_checker(char *str)
-{
-	t_list	*tokens;
-
-	tokens = NULL;
-	if (ft_check_syntax(str))
-		return (1);
-	tokens = ft_inittokens(str);
-	if (!tokens)
-		return (2);
-	if (ft_check_type(tokens))
-		return (3);
-	if (ft_check_tokens(tokens))
-		return (4);
-	g_cmd.tokens = tokens;
-	g_cmd.commands = get_listcmd();
-	return (0);
 }
 
 int	main(int argc, char const *argv[], char **envp)

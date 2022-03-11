@@ -6,13 +6,13 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 15:11:09 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:23 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 09:42:40 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	init_handler(int sig)
+static void	init_handler(int sig)
 {
 	char	*result;
 
@@ -35,6 +35,7 @@ void	init_handler(int sig)
 		result = ft_strjoin(result, "  ");
 		write(1, result, ft_strlen(result));
 		write(1, "\n", 1);
+		g_cmd.exit_code = 1;
 		rl_redisplay();
 	}
 }
@@ -48,7 +49,7 @@ void	setup_term(void)
 	tcsetattr(0, TCSANOW, &t);
 }
 
-void	quit_handler(int sig)
+static void	quit_handler(int sig)
 {
 	(void) sig;
 	if (g_cmd.is_forked == 1 && !g_cmd.in_herdoc)

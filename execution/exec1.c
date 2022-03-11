@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 06:00:28 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/11 11:27:29 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 14:11:51 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int	pipe_handler(t_list *cmd, t_pipe *p)
 			p->fds[0] = 0;
 			p->outfd = 1;
 		}
-		if (handle_files(p->files, &p->infd, &p->outfd) != -1)
+		if (handle_files(p->files, &p->infd, &p->outfd) != -1
+			&& g_cmd.is_forked != 3)
 		{
 			if (!check_builtin(p->cmd[0]))
 				p->pids[p->i++] = execute_cmd(p->cmd, p, 0);

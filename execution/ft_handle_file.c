@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_handle_file.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 04:18:30 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/11 10:44:04 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 14:08:20 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	handle_file_if1(t_files *file)
 	write(STDERR, "minishell : ", 12);
 	write(STDERR, file->value, ft_strnchr(file->value, 0));
 	write(STDERR, ": No such file or directory\n", 28);
-	g_cmd.is_forked = 2;
+	g_cmd.is_forked = 3;
 	g_cmd.exit_code = 1;
 	return (-1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 00:41:28 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/11 09:34:36 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 15:25:47 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,8 @@ int	ft_export_check_params(char *param, int fd)
 {
 	char	**ret;
 
-	if (!param)
-	{
-		ft_printenv(fd, 1);
-		return (1);
-	}
-	else
+	(void)fd;
+	if (param)
 	{
 		ret = get_name_value(param);
 		if (ret == NULL)
@@ -91,15 +87,12 @@ void	ft_export_helper(char *param)
 	g_cmd.env_p = ret;
 }
 
-int	ft_export(char **names, int fd)
+int	len_env(char **l)
 {
 	int	i;
 
-	i = 1;
-	while (names && names[i])
-	{
-		if (ft_export_one(names[i], fd))
-			i++;
-	}
-	return (0);
+	i = 0;
+	while (l && l[i])
+		i++;
+	return (i);
 }

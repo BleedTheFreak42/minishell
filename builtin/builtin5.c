@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin5.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 00:44:09 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/11 11:27:23 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 15:25:41 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,24 @@ int	ft_pwd(int fd)
 	}
 	if (pwd != NULL)
 		free(pwd);
+	return (0);
+}
+
+int	ft_export(char **names, int fd)
+{
+	int	i;
+
+	i = 1;
+	if (len_env(names) == 1)
+	{
+		ft_printenv(fd, 1);
+		return (0);
+	}
+	while (names && names[i])
+	{
+		if (ft_export_one(names[i], fd) == 1)
+			return (1);
+		i++;
+	}
 	return (0);
 }

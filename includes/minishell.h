@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/11 11:29:02 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 15:39:22 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,15 @@ typedef struct s_command
 	t_list	*args;
 	t_list	*file;
 }t_command;
+
+typedef struct s_unset_var
+{
+	char	**new_env;
+	char	**old_var;
+	char	**env;
+	size_t	i;
+	size_t	j;
+}t_unset_var;
 
 t_minishell	g_cmd;
 
@@ -138,5 +147,6 @@ int				ft_export_check_params(char *param, int fd);
 void			ft_export_helper(char *param);
 void			iko(char **args, int i, int *flag);
 void			ft_bzero(void *s, size_t n);
+int				len_env(char **l);
 
 #endif

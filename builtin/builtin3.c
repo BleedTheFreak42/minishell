@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ael-ghem <ael-ghem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 00:43:11 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/11 05:18:18 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 15:55:14 by ael-ghem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,41 @@
 int	ft_unset(char **names)
 {
 	int	i;
+	int	ret;
 
-	i = 0;
+	i = 1;
+	ret = 0;
 	while (names && names[i])
 	{
-		ft_unset_one(names[i]);
+		if (ft_unset_one(names[i]) == 1)
+			ret = 1;
 		i++;
 	}
-	return (0);
+	return (ret);
 }
 
 int	ft_unset_one(char *name)
 {
 	char	**new_env;
 	char	**old_var;
-	char	**env;
 	size_t	i;
 	size_t	j;
 
-	env = g_cmd.env_p;
+	if (!check_export_input(name)
+		&& printf("minishell : unset: `%s': not a valid identifier\n", name))
+		return (1);
 	new_env = (char **)malloc(sizeof(char *) * (g_cmd.env_len + 1));
 	i = 0;
 	j = 0;
-	while (env[i])
+	while (g_cmd.env_p[i])
 	{
-		old_var = get_name_value(env[i]);
+		old_var = get_name_value(g_cmd.env_p[i]);
 		if (ft_comp(old_var[0], name)
-			&& ft_strlen(old_var[0]) == ft_strlen(name))
-				i++;
-		if (env[i] == NULL)
+			&& ft_strlen(old_var[0]) == ft_strlen(name)
+			&& g_cmd.env_p[++i] == NULL)
 			break ;
 		else
-			new_env[j++] = ft_strdup(env[i++], 0);
+			new_env[j++] = ft_strdup(g_cmd.env_p[i++], 0);
 	}
 	new_env[j] = NULL;
 	ft_free_env(&g_cmd.env_p);

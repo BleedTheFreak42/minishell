@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 03:16:09 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/10 13:54:23 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 10:58:39 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int		ft_strncmp(char *str1, char *str2, int n);
 int		here_doc(char *path, char *esc);
 void	exec(char **cmd, char **envp);
 int		ft_strncmp(char *s1, char *s2, int n);
-char	*getpath(char **cmd, char **envp);
 char	*join_path(char *path, char *bin);
 int		execute(t_list *cmd);
 #endif

@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 00:44:09 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/11 08:58:21 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 11:27:23 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_echo(char **args)
 
 	i = 0;
 	j = 0;
-	bzero(&flag, sizeof(int) * 5);
+	ft_bzero(&flag, sizeof(int) * 5);
 	iko(args, i, flag);
 	if (!flag[1])
 		write(1, "\n", 1);

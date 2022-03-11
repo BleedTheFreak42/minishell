@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 00:21:04 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/11 09:45:24 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 11:29:02 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,5 +137,6 @@ void			ft_free_env(char ***env_p);
 int				ft_export_check_params(char *param, int fd);
 void			ft_export_helper(char *param);
 void			iko(char **args, int i, int *flag);
+void			ft_bzero(void *s, size_t n);
 
 #endif

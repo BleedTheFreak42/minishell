@@ -6,7 +6,7 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 06:00:28 by ytaya             #+#    #+#             */
-/*   Updated: 2022/03/11 09:27:45 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 11:27:29 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ int	execute(t_list *cmd)
 	t_pipe	p;
 
 	g_cmd.is_forked = 1;
-	bzero(&p, sizeof(t_pipe));
+	ft_bzero(&p, sizeof(t_pipe));
 	p.pids = (pid_t *)xmalloc(sizeof(pid_t) * list_size(cmd) + 1);
 	if (pipe_handler(cmd, &p) == -1)
 		return (-1);
 	while (p.j < p.i)
 	{
 		if (p.pids[p.j] == -1)
-			printf("minishell: fork: Resource temporarily unavailable\n");
+			printf("minishell : fork: Resource temporarily unavailable\n");
 		waitpid(p.pids[p.j++], &p.status, 0);
 		if (WTERMSIG(p.status) == SIGQUIT)
 			write(2, "Quit : 3\n", 9);

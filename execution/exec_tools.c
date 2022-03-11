@@ -6,13 +6,13 @@
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 02:50:27 by ael-ghem          #+#    #+#             */
-/*   Updated: 2022/03/11 09:36:01 by ytaya            ###   ########.fr       */
+/*   Updated: 2022/03/11 11:26:20 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*getpath(char **cmd, char **envp)
+static char	*getpath(char **cmd, char **envp)
 {
 	char	*path;
 	char	*dir;
@@ -50,15 +50,19 @@ void	exec(char **cmd, char **envp)
 		path = getpath(cmd, g_cmd.env_p);
 	else
 		path = cmd[0];
-	execve(path, cmd, g_cmd.env_p);
 	if (path)
+		execve(path, cmd, g_cmd.env_p);
+	if (!path)
 	{
+		access(cmd[0], F_OK);
 		write(STDERR, "minishell: ", 12);
+		write(STDERR, cmd[0], ft_strnchr(cmd[0], '\0'));
+		write(STDERR, ": ", 2);
 		write(STDERR, strerror(errno), ft_strlen(strerror(errno)));
-		write(STDERR, " ", 1);
-		write(STDERR, path, ft_strnchr(path, '\0'));
 		write(STDERR, "\n", 1);
 	}
+	else
+		printf("minishell: %s: command not found\n", cmd[0]);
 	exit(127);
 }
 

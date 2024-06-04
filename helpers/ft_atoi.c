@@ -10,26 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-unsigned char	ft_atoi(const char *nptr)
-{
-	unsigned long long			number;
-	int							sign;
-	int							i;
-	int							n;
+unsigned char ft_atoi(const char *nptr) {
+  unsigned long long number;
+  int sign;
+  int i;
 
-	i = 0;
-	sign = 1;
-	number = 0;
-	if (nptr)
-	{
-		while (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13))
-			i++;
-		if (nptr[i] == '-' || nptr[i] == '+')
-			if (nptr[i++] == '-')
-				sign = -1;
-		n = i;
-		while (nptr[i] >= '0' && nptr[i] <= '9')
-			number = number * 10 + (nptr[i++] - 48);
-	}
-	return (number * sign);
+  i = 0;
+  sign = 1;
+  number = 0;
+  if (nptr) {
+    while (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13))
+      i++;
+    if (nptr[i] == '-' || nptr[i] == '+')
+      if (nptr[i++] == '-')
+        sign = -1;
+    while (nptr[i] >= '0' && nptr[i] <= '9')
+      number = number * 10 + (nptr[i++] - 48);
+  }
+  return (number * sign);
 }
